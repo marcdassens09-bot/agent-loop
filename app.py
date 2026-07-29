@@ -1,3 +1,5 @@
+from memory_agent import MemoryAgent
+agent = MemoryAgent()
 import os
 os.environ["PYTHONUTF8"] = "1"
 from flask import Flask, request, jsonify
@@ -19,6 +21,8 @@ def chat():
     if session_id not in conversation_store:
         conversation_store[session_id] = []
     conversation_store[session_id].append({"role": "user", "content": user_message})
+    if agent.doit_resumer():
+        agent.resumer(conversation_store[session_id])
     result = agent_camping(session_id, user_message)
     assistant_reply = result.get("response", "")
     conversation_store[session_id].append({"role": "assistant", "content": assistant_reply})
