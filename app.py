@@ -5,7 +5,8 @@ os.environ["PYTHONUTF8"] = "1"
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from agent import agent_camping
-
+from search_agent import SearchAgent
+search = SearchAgent()
 load_dotenv()
 
 app = Flask(__name__)
