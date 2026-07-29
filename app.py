@@ -6,6 +6,8 @@ from debug_agent import DebugAgent
 debug = DebugAgent()
 from prospect_agent import ProspectAgent
 prospect = ProspectAgent()
+from deploy_agent import DeployAgent
+deploy = DeployAgent()
 import os
 os.environ["PYTHONUTF8"] = "1"
 from flask import Flask, request, jsonify
