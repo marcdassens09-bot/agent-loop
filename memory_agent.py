@@ -1,136 +1,116 @@
 """
 memory_agent.py — Agent Mémoire MP Solutions IA
-Résume la conversation et retient les décisions importantes.
-Usage : from memory_agent import MemoryAgent
 """
-
 import anthropic
 import json
+import requests
 from datetime import datetime
+from dotenv import load_dotenv
+load_dotenv()
 
-client = anthropic.Anthropic()  # lit ANTHROPIC_API_KEY depuis .env
+client = anthropic.Anthropic()
+
+DRIVE_FILE_ID = "1cu0ow2ieeWpo7odrkS83XFPeHBUbJV8eBtAcWzrVNYc"
 
 SYSTEM_PROMPT = """Tu es l'Agent Mémoire de MP Solutions IA.
-Ton seul rôle : analyser une conversation et produire un résumé structuré en JSON.
-
-Réponds UNIQUEMENT avec ce JSON, rien d'autre :
+Réponds UNIQUEMENT avec ce JSON :
 {
-  "resume": "Résumé court de la conversation en 2-3 phrases",
-  "decisions": ["décision 1", "décision 2"],
-  "erreurs_vues": ["erreur 1 déjà résolue", "erreur 2 déjà résolue"],
-  "code_produit": ["fichier1.py : ce qu'il fait", "fichier2.py : ce qu'il fait"],
+  "resume": "Résumé court en 2-3 phrases",
+  "decisions": ["décision 1"],
+  "erreurs_vues": ["erreur résolue 1"],
+  "code_produit": ["fichier.py : ce qu'il fait"],
   "prochaine_etape": "Ce qu'il reste à faire"
 }"""
 
+def get_drive_token():
+    with open("token.json", "r") as f:
+        return json.load(f)["token"]
+
+def sauvegarder_drive(memoire):
+    token = get_drive_token()
+    contenu = f"JSON_BRUT:\n{json.dumps(memoire, ensure_ascii=False, indent=2)}"
+    url = f"https://www.googleapis.com/upload/drive/v3/files/{DRIVE_FILE_ID}"
+    headers = {"Authorization": f"Bearer {token}", "Content-Type": "text/plain; charset=utf-8"}
+    r = requests.patch(url, params={"uploadType": "media"}, headers=headers, data=contenu.encode("utf-8"))
+    if r.status_code == 200:
+        print("✓ Mémoire sauvegardée sur Google Drive.")
+    else:
+        print(f"⚠️ Erreur Drive {r.status_code}: {r.text}")
+
+def charger_drive():
+    token = get_drive_token()
+    url = f"https://www.googleapis.com/drive/v3/files/{DRIVE_FILE_ID}/export"
+    headers = {"Authorization": f"Bearer {token}"}
+    r = requests.get(url, params={"mimeType": "text/plain"}, headers=headers)
+    if r.status_code != 200:
+        return {}
+    texte = r.text
+    debut = texte.find("{")
+    fin = texte.rfind("}") + 1
+    if debut == -1:
+        return {}
+    return json.loads(texte[debut:fin])
 
 class MemoryAgent:
     def __init__(self):
-        self.memoire = {
-            "resume": "",
-            "decisions": [],
-            "erreurs_vues": [],
-            "code_produit": [],
-            "prochaine_etape": "",
-            "derniere_mise_a_jour": ""
-        }
+        self.memoire = {"resume": "", "decisions": [], "erreurs_vues": [], "code_produit": [], "prochaine_etape": "", "derniere_mise_a_jour": ""}
         self.compteur_messages = 0
-        self.FREQUENCE_RESUME = 5  # résume toutes les 5 messages
+        self.FREQUENCE_RESUME = 5
+        try:
+            data = charger_drive()
+            if data:
+                self.memoire.update(data)
+                print(f"✓ Mémoire chargée ({self.memoire.get('derniere_mise_a_jour','?')})")
+        except Exception as e:
+            print(f"⚠️ Chargement échoué : {e}")
 
-    def doit_resumer(self) -> bool:
-        """Retourne True si on doit faire un nouveau résumé."""
+    def sauvegarder(self):
+        sauvegarder_drive(self.memoire)
+
+    def doit_resumer(self):
         self.compteur_messages += 1
         return self.compteur_messages % self.FREQUENCE_RESUME == 0
 
-    def resumer(self, historique: list[dict]) -> dict:
-        """
-        Envoie l'historique à Claude et récupère un résumé structuré.
-        historique : liste de dicts {"role": "user"/"assistant", "content": "..."}
-        """
-        # On prend les 20 derniers messages max pour ne pas exploser les tokens
+    def resumer(self, historique):
         historique_court = historique[-20:]
-
-        conversation_texte = "\n".join([
-            f"{msg['role'].upper()} : {msg['content']}"
-            for msg in historique_court
-        ])
-
-        prompt = f"""Voici la conversation à résumer :
-
-{conversation_texte}
-
-Résumé existant (à enrichir si besoin) :
-{json.dumps(self.memoire, ensure_ascii=False, indent=2)}"""
-
-        response = client.messages.create(
-            model="claude-sonnet-4-6",
-            max_tokens=1000,
-            system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": prompt}]
-        )
-
-        texte = response.content[0].text.strip()
-
-        # Nettoie les balises markdown si présentes
-        texte = texte.replace("```json", "").replace("```", "").strip()
-
-        nouveau_resume = json.loads(texte)
-        nouveau_resume["derniere_mise_a_jour"] = datetime.now().strftime("%d/%m/%Y %H:%M")
-        self.memoire = nouveau_resume
+        conversation_texte = "\n".join([f"{m['role'].upper()} : {m['content']}" for m in historique_court])
+        prompt = f"Conversation :\n{conversation_texte}\n\nRésumé existant :\n{json.dumps(self.memoire, ensure_ascii=False)}"
+        response = client.messages.create(model="claude-sonnet-4-6", max_tokens=1000, system=SYSTEM_PROMPT, messages=[{"role": "user", "content": prompt}])
+        texte = response.content[0].text.strip().replace("```json","").replace("```","").strip()
+        nouveau = json.loads(texte)
+        nouveau["derniere_mise_a_jour"] = datetime.now().strftime("%d/%m/%Y %H:%M")
+        self.memoire = nouveau
         return self.memoire
 
-    def get_contexte(self) -> str:
-        """
-        Retourne le contexte mémorisé formaté pour l'injecter dans un SYSTEM_PROMPT.
-        Utilise ~150-200 tokens seulement.
-        """
+    def get_contexte(self):
         if not self.memoire["resume"]:
             return ""
-
-        lignes = [
-            "=== MÉMOIRE DE LA CONVERSATION ===",
-            f"Résumé : {self.memoire['resume']}",
-        ]
-
+        lignes = ["=== MÉMOIRE DE LA CONVERSATION ===", f"Résumé : {self.memoire['resume']}"]
         if self.memoire["decisions"]:
-            lignes.append("Décisions prises : " + " | ".join(self.memoire["decisions"]))
-
+            lignes.append("Décisions : " + " | ".join(self.memoire["decisions"]))
         if self.memoire["erreurs_vues"]:
-            lignes.append("Erreurs déjà résolues : " + " | ".join(self.memoire["erreurs_vues"]))
-
+            lignes.append("Erreurs résolues : " + " | ".join(self.memoire["erreurs_vues"]))
         if self.memoire["code_produit"]:
-            lignes.append("Code produit : " + " | ".join(self.memoire["code_produit"]))
-
+            lignes.append("Code : " + " | ".join(self.memoire["code_produit"]))
         if self.memoire["prochaine_etape"]:
             lignes.append(f"Prochaine étape : {self.memoire['prochaine_etape']}")
-
         lignes.append("=================================")
         return "\n".join(lignes)
 
     def afficher(self):
-        """Affiche la mémoire actuelle dans le terminal."""
         print("\n📋 MÉMOIRE ACTUELLE")
         print("=" * 40)
         print(json.dumps(self.memoire, ensure_ascii=False, indent=2))
         print("=" * 40)
 
-
-# ── Exemple d'utilisation ──────────────────────────────────────────────────────
 if __name__ == "__main__":
     agent = MemoryAgent()
-
-    # Simule un historique de conversation
     historique_test = [
-        {"role": "user", "content": "Je veux créer un chatbot pour le Camping Les Eychecadous."},
-        {"role": "assistant", "content": "D'accord. On va créer agent.py avec Flask. Commence par installer flask et anthropic."},
-        {"role": "user", "content": "J'ai une erreur : ModuleNotFoundError: No module named 'flask'"},
-        {"role": "assistant", "content": "Lance : pip install flask anthropic python-dotenv"},
-        {"role": "user", "content": "Ça marche ! Maintenant j'ai une erreur 500 sur /chat"},
-        {"role": "assistant", "content": "Vérifie que ta clé API est bien dans le fichier .env : ANTHROPIC_API_KEY=sk-ant-..."},
+        {"role": "user", "content": "On a mis en place le système de mémoire Drive."},
+        {"role": "assistant", "content": "Oui, token.json créé, agent mémoire fonctionnel."},
     ]
-
-    print("Résumé en cours...")
-    resume = agent.resumer(historique_test)
+    agent.resumer(historique_test)
     agent.afficher()
-
-    print("\n📌 CONTEXTE À INJECTER DANS LE SYSTEM PROMPT :")
+    agent.sauvegarder()
+    print("\n📌 CONTEXTE :")
     print(agent.get_contexte())
