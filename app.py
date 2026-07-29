@@ -1,5 +1,7 @@
 from memory_agent import MemoryAgent
 agent = MemoryAgent()
+from layout_agent import LayoutAgent
+layout = LayoutAgent()
 import os
 os.environ["PYTHONUTF8"] = "1"
 from flask import Flask, request, jsonify
