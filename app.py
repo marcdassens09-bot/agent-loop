@@ -4,6 +4,8 @@ from layout_agent import LayoutAgent
 layout = LayoutAgent()
 from debug_agent import DebugAgent
 debug = DebugAgent()
+from prospect_agent import ProspectAgent
+prospect = ProspectAgent()
 import os
 os.environ["PYTHONUTF8"] = "1"
 from flask import Flask, request, jsonify
