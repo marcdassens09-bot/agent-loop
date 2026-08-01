@@ -10,7 +10,9 @@ logger = logging.getLogger(__name__)
 
 # Client Anthropic avec timeouts augmentés pour Render (60s au lieu de 30s par défaut)
 import httpx
+api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
 client = Anthropic(
+    api_key=api_key,
     timeout=httpx.Timeout(60.0),
     max_retries=3
 )

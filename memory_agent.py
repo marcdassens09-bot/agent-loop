@@ -1,6 +1,7 @@
 """
 memory_agent.py — Agent Mémoire MP Solutions IA
 """
+import os
 import anthropic
 import json
 import requests
@@ -8,7 +9,8 @@ from datetime import datetime
 from dotenv import load_dotenv
 load_dotenv()
 
-client = anthropic.Anthropic()
+api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
+client = anthropic.Anthropic(api_key=api_key)
 
 DRIVE_FILE_ID = "1cu0ow2ieeWpo7odrkS83XFPeHBUbJV8eBtAcWzrVNYc"
 

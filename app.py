@@ -106,14 +106,14 @@ def diagnose():
     """Endpoint de diagnostic pour vérifier la connexion API Anthropic."""
     diagnostics = {
         "status": "unknown",
-        "api_key_present": bool(os.getenv("ANTHROPIC_API_KEY")),
+        "api_key_present": bool(os.getenv("ANTHROPIC_API_KEY", "").strip()),
         "api_key_format": "",
         "connectivity": {},
         "errors": []
     }
 
     try:
-        api_key = os.getenv("ANTHROPIC_API_KEY", "")
+        api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
         if api_key:
             diagnostics["api_key_format"] = f"{api_key[:20]}...{api_key[-10:]}"
 
@@ -144,7 +144,8 @@ def diagnose():
         logger.info("Test 3: Test appel API Anthropic...")
         try:
             from anthropic import Anthropic
-            test_client = Anthropic(timeout=httpx.Timeout(30.0))
+            test_api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
+            test_client = Anthropic(api_key=test_api_key, timeout=httpx.Timeout(30.0))
             response = test_client.messages.create(
                 model="claude-opus-4-1",
                 max_tokens=10,

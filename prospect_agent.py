@@ -4,11 +4,15 @@ Gère les dossiers commerciaux : fiche découverte, dossier, bon de commande, qu
 Usage : from prospect_agent import ProspectAgent
 """
 
+import os
 import anthropic
 import json
 from datetime import datetime
+from dotenv import load_dotenv
+load_dotenv()
 
-client = anthropic.Anthropic()
+api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
+client = anthropic.Anthropic(api_key=api_key)
 
 SYSTEM_PROMPT = """Tu es l'Agent Prospect de MP Solutions IA.
 Tu aides Marc-Paul Dassens à préparer ses dossiers commerciaux.

@@ -4,10 +4,14 @@ Analyse les erreurs Python/Flask et propose des corrections.
 Usage : from debug_agent import DebugAgent
 """
 
+import os
 import anthropic
 import re
+from dotenv import load_dotenv
+load_dotenv()
 
-client = anthropic.Anthropic()
+api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
+client = anthropic.Anthropic(api_key=api_key)
 
 SYSTEM_PROMPT = """Tu es l'Agent Débogage de MP Solutions IA.
 Tu analyses les erreurs Python/Flask et tu proposes des corrections claires.
