@@ -147,7 +147,7 @@ def diagnose():
             test_api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
             test_client = Anthropic(api_key=test_api_key, timeout=httpx.Timeout(30.0))
             response = test_client.messages.create(
-                model="claude-opus-4-1",
+                model="claude-sonnet-4-6",
                 max_tokens=10,
                 messages=[{"role": "user", "content": "Hi"}]
             )
