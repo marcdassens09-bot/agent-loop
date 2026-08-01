@@ -1,10 +1,19 @@
 import os
+import time
+import logging
 from dotenv import load_dotenv
 from anthropic import Anthropic
 
 load_dotenv()
 
-client = Anthropic()
+logger = logging.getLogger(__name__)
+
+# Client Anthropic avec timeouts augmentés pour Render (60s au lieu de 30s par défaut)
+import httpx
+client = Anthropic(
+    timeout=httpx.Timeout(60.0),
+    max_retries=3
+)
 
 REQUIRED_FIELDS = ["nom", "date_arrivee", "date_depart", "nb_personnes", "type_emplacement", "telephone"]
 
@@ -117,6 +126,19 @@ Pour les tarifs des mobil-homes et tentes lodge, inviter le visiteur à consulte
 
 conversation_store = {}
 
+def appel_api_avec_retry(func, max_tentatives=3, delai_initial=1):
+    """Enveloppe un appel API avec retry et exponential backoff."""
+    for tentative in range(max_tentatives):
+        try:
+            return func()
+        except Exception as e:
+            if tentative == max_tentatives - 1:
+                logger.error(f"Échec après {max_tentatives} tentatives: {str(e)}")
+                raise
+            delai = delai_initial * (2 ** tentative)
+            logger.warning(f"Tentative {tentative + 1} échouée, retry dans {delai}s: {str(e)}")
+            time.sleep(delai)
+
 def extraire_infos(messages):
     collected = {}
     if not messages:
@@ -139,14 +161,13 @@ Réponds UNIQUEMENT en JSON valide avec ces clés (laisse vide si non mentionné
   "telephone": ""
 }}"""
 
-    response = client.messages.create(
-        model="claude-sonnet-4-6",
-        max_tokens=300,
-        messages=[{"role": "user", "content": extraction_prompt}]
-    )
-
     import json
     try:
+        response = appel_api_avec_retry(lambda: client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=300,
+            messages=[{"role": "user", "content": extraction_prompt}]
+        ))
         text = response.content[0].text.strip()
         if "```" in text:
             text = text.split("```")[1]
@@ -154,7 +175,8 @@ Réponds UNIQUEMENT en JSON valide avec ces clés (laisse vide si non mentionné
                 text = text[4:]
         collected = json.loads(text.strip())
         collected = {k: v for k, v in collected.items() if v and v.strip()}
-    except:
+    except Exception as e:
+        logger.error(f"Erreur lors de l'extraction des infos: {str(e)}")
         collected = {}
 
     return collected
@@ -189,14 +211,18 @@ Le Camping Les Eychecadous"""
         return {"response": recap, "collected": collected, "ready": True}
 
     # Répondre à la question posée si elle n'est pas liée à la réservation
-    response = client.messages.create(
-        model="claude-sonnet-4-6",
-        max_tokens=500,
-        system=SYSTEM_PROMPT,
-        messages=messages
-    )
-
-    assistant_reply = response.content[0].text
+    try:
+        response = appel_api_avec_retry(lambda: client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=500,
+            system=SYSTEM_PROMPT,
+            messages=messages
+        ))
+        assistant_reply = response.content[0].text
+    except Exception as e:
+        logger.error(f"Erreur API Anthropic: {str(e)}")
+        assistant_reply = f"Désolé, j'ai rencontré un problème technique. Veuillez réessayer ou contacter l'accueil au 05 67 44 51 65."
+        return {"response": assistant_reply, "collected": collected, "ready": False}
     messages.append({"role": "assistant", "content": assistant_reply})
 
     # Si le visiteur semble vouloir réserver, poser la prochaine question

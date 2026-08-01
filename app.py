@@ -18,6 +18,7 @@ from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from agent import agent_camping
 from search_agent import SearchAgent
+from anthropic import APIConnectionError, APITimeoutError
 search = SearchAgent()
 load_dotenv()
 
@@ -67,6 +68,14 @@ def chat():
         logger.info("=== Fin requête /chat - Succès ===")
         return jsonify({"session_id": session_id, "response": assistant_reply, "collected": result.get("collected", {}), "ready": result.get("ready", False)})
 
+    except (APIConnectionError, APITimeoutError) as e:
+        logger.error(f"ERREUR CONNEXION API: {str(e)}")
+        logger.error(f"Traceback:\n{traceback.format_exc()}")
+        return jsonify({
+            "error": "Erreur de connexion à l'API (free tier Render ?)",
+            "details": str(e),
+            "retry": True
+        }), 503
     except Exception as e:
         logger.error(f"ERREUR dans /chat: {str(e)}")
         logger.error(f"Traceback complet:\n{traceback.format_exc()}")
