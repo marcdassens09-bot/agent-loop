@@ -1,475 +1,98 @@
-# 🚀 MP Solutions IA - Application Flask Multi-Métiers
+# MP Solutions IA — serveur chatbot multi-métiers
 
-Application Flask pour mpsolutionsia.fr avec support de **8 métiers** différents.
+Serveur Flask qui expose un chatbot Claude paramétré par métier.
 
----
+| Fichier | Rôle |
+|---|---|
+| `mpsolutionsia_app.py` | Application Flask (point d'entrée) |
+| `mp_system_prompts.py` | Les 8 system prompts, un par métier |
+| `Procfile` | Commande de démarrage |
 
-## 📋 Vue d'ensemble
+## Métiers
 
-### Ce qu'elle fait
+`plombier` · `camping` · `boulangerie` · `restaurant` · `artisan_batiment` · `paysagiste` · `jardinerie` · `fabricant_pme`
 
-Un serveur Flask avec route `/chat` qui:
-- ✅ Reçoit un message + un métier
-- ✅ Charge le system prompt adapté au métier
-- ✅ Appelle Claude Sonnet via l'API Anthropic
-- ✅ Retourne la réponse
+Variantes acceptées : `artisan bâtiment`, `batiment`, `pme`, `fabricant`.
 
-### Les 8 métiers supportés
+## Endpoints
 
-1. **Plombier** - Diagnostics, réparations, devis
-2. **Camping** - Réservations, hébergements, activités
-3. **Boulangerie** - Produits frais, commandes spéciales
-4. **Restaurant** - Menu, réservations, recommandations
-5. **Artisan Bâtiment** - Rénovation, construction, devis
-6. **Paysagiste** - Aménagement extérieur, jardins
-7. **Jardinerie** - Plantes, outils, conseils jardinage
-8. **Fabricant PME** - Production, devis, commandes
+| Méthode | Route | Description |
+|---|---|---|
+| GET | `/health` | État du service + présence de la clé API (503 si absente) |
+| GET | `/metiers` | Liste des métiers disponibles |
+| GET | `/diagnose` | DNS, HTTP et appel réel à l'API Anthropic |
+| POST | `/chat` | Conversation |
+| POST | `/reset` | Vide une session |
 
----
+### POST /chat
 
-## 📁 Fichiers créés
-
-| Fichier | Description |
-|---------|-------------|
-| `mpsolutionsia_app.py` | Application Flask principale |
-| `mp_system_prompts.py` | System prompts pour les 8 métiers |
-| `Procfile` | Configuration Render |
-| `requirements.txt` | Dépendances Python |
-
----
-
-## 🎯 Endpoints disponibles
-
-### Health Check
-```
-GET /health
-```
-Réponse:
 ```json
-{"status": "alive", "app": "mpsolutionsia"}
+{ "message": "Ma baignoire fuit", "metier": "plombier", "session_id": "client_001" }
 ```
 
-### Lister les métiers
-```
-GET /metiers
-```
-Réponse:
+`session_id` est optionnel (défaut : `default_<metier>`). Il conserve l'historique de conversation en mémoire — donc **perdu à chaque redéploiement ou mise en veille**.
+
+Réponse :
+
 ```json
-{
-  "metiers": ["plombier", "camping", "boulangerie", ...],
-  "count": 8
-}
+{ "response": "...", "session_id": "client_001", "metier": "plombier" }
 ```
 
-### Chat (Principal)
-```
-POST /chat
-Content-Type: application/json
-```
+## Configuration
 
-**Requête:**
-```json
-{
-  "message": "Je voudrais commander un pain complet",
-  "metier": "boulangerie",
-  "session_id": "optional_client_123"
-}
+Une seule variable requise :
+
+```
+ANTHROPIC_API_KEY=sk-ant-api03-...
 ```
 
-**Réponse:**
-```json
-{
-  "response": "Bonjour! Nous avons d'excellents pains complets...",
-  "session_id": "optional_client_123",
-  "metier": "boulangerie"
-}
-```
+En local : dans `.env` (non versionné). Sur Render : dans Environment Variables.
 
-### Réinitialiser une session
-```
-POST /reset
-Content-Type: application/json
-```
-
-**Requête:**
-```json
-{
-  "session_id": "client_123"
-}
-```
-
-**Réponse:**
-```json
-{
-  "status": "ok",
-  "session_id": "client_123",
-  "message": "Session réinitialisée"
-}
-```
-
-### Diagnostic
-```
-GET /diagnose
-```
-
-Vérifie:
-- ✅ Clé API Anthropic présente
-- ✅ Résolution DNS (api.anthropic.com)
-- ✅ Connectivité HTTP
-- ✅ Appel API Anthropic fonctionnel
-
----
-
-## 🔧 Configuration
-
-### Variables d'environnement (.env)
-
-```env
-ANTHROPIC_API_KEY=sk-ant-api03-xxxxx...
-PORT=5000
-```
-
-### Fichier .env requis
-
-La clé API **doit** être dans le fichier `.env`:
-
-```bash
-echo "ANTHROPIC_API_KEY=sk-ant-api03-xxxxx" > .env
-```
-
-⚠️ **Ne commit JAMAIS le .env** - Il est dans `.gitignore`
-
----
-
-## 🚀 Lancer en local
-
-### 1️⃣ Installation des dépendances
+## Lancer en local
 
 ```bash
 pip install -r requirements.txt
-```
-
-### 2️⃣ Créer le fichier .env
-
-```bash
-# Créer .env et ajouter ta clé API
-echo "ANTHROPIC_API_KEY=sk-ant-api03-xxxxx" > .env
-```
-
-### 3️⃣ Lancer l'app
-
-```bash
 python mpsolutionsia_app.py
 ```
 
-App disponible sur: `http://localhost:5000`
-
-### 4️⃣ Tester
-
-**Health check:**
 ```bash
 curl http://localhost:5000/health
 ```
 
-**Lister métiers:**
-```bash
-curl http://localhost:5000/metiers
-```
+## Déploiement Render
 
-**Chat (exemple: boulangerie):**
-```bash
-curl -X POST http://localhost:5000/chat \
-  -H "Content-Type: application/json" \
-  -d '{
-    "message": "Avez-vous des croissants aujourd'\''hui?",
-    "metier": "boulangerie"
-  }'
-```
+⚠️ **Le point qui fait perdre des heures.** Render auto-détecte `app.py` à la racine et pré-remplit la Start Command avec `gunicorn app:app`. **Cette valeur du dashboard écrase le `Procfile`.** Le service démarre alors le chatbot camping (`app.py`) au lieu de celui-ci, et aucune modification de `mpsolutionsia_app.py` n'a d'effet.
 
-**Diagnostic:**
-```bash
-curl http://localhost:5000/diagnose
-```
-
----
-
-## 🌐 Déployer sur Render
-
-### Prérequis
-
-- Compte [Render.com](https://render.com)
-- Repository GitHub avec le code
-
-### 1️⃣ Créer un Web Service sur Render
-
-1. Va sur [Render Dashboard](https://dashboard.render.com)
-2. Clique "New +" → "Web Service"
-3. Connecte ton repository GitHub
-4. Remplace la commande de démarrage:
+Settings → **Start Command** doit être exactement :
 
 ```
 gunicorn mpsolutionsia_app:app
 ```
 
-### 2️⃣ Ajouter les variables d'environnement
+Configuration complète :
 
-Dans les paramètres Render, ajoute:
+| Champ | Valeur |
+|---|---|
+| Environment | Python 3 |
+| Build Command | `pip install -r requirements.txt` |
+| Start Command | `gunicorn mpsolutionsia_app:app` |
+| Env var | `ANTHROPIC_API_KEY` |
 
-```
-ANTHROPIC_API_KEY=sk-ant-api03-xxxxx...
-```
-
-### 3️⃣ Déployer
-
-- Render détecte automatiquement `Procfile`
-- Installe les dépendances de `requirements.txt`
-- Lance l'application
-
-URL: `https://mpsolutionsia.onrender.com` (exemple)
-
----
-
-## 📊 Exemple d'utilisation complet
-
-### Conversation avec un plombier
+### Vérifier qu'on exécute bien le bon fichier
 
 ```bash
-# Message 1: Question
-curl -X POST http://localhost:5000/chat \
-  -H "Content-Type: application/json" \
-  -d '{
-    "message": "Ma baignoire fuit. Quel peut être le problème?",
-    "metier": "plombier",
-    "session_id": "client_001"
-  }'
+curl https://<service>.onrender.com/health
 ```
 
-Réponse:
-```json
-{
-  "response": "Bonjour! Une fuite de baignoire peut provenir de plusieurs sources...",
-  "session_id": "client_001",
-  "metier": "plombier"
-}
-```
+- `{"status":"alive","api_key_set":true,...}` → correct, clé présente
+- `{"status":"alive"}` seul → **c'est `app.py` qui tourne**, corriger la Start Command
+- `api_key_set:false` (503) → la variable d'environnement manque
 
-```bash
-# Message 2: Question de suivi (même session)
-curl -X POST http://localhost:5000/chat \
-  -H "Content-Type: application/json" \
-  -d '{
-    "message": "Combien ça coûte pour une réparation?",
-    "metier": "plombier",
-    "session_id": "client_001"
-  }'
-```
+Les logs de démarrage doivent contenir `[STARTUP] ANTHROPIC_API_KEY présente: True`. Si à la place ils contiennent `SECUREHOLIDAY_API_KEY non configuré`, c'est `app.py` qui démarre.
 
-Réponse:
-```json
-{
-  "response": "Le coût dépend de la nature de la réparation...",
-  "session_id": "client_001",
-  "metier": "plombier"
-}
-```
+## Limites connues
 
----
-
-## 🔐 Sécurité
-
-✅ **Clé API protégée:**
-- Stockée dans `.env` (non committé)
-- Variable d'environnement à la runtime
-- Utilisée uniquement en backend
-
-✅ **Timeouts configurés:**
-- 60 secondes pour Render
-- Retry automatique (3 tentatives)
-
-✅ **Gestion d'erreurs:**
-- Messages d'erreur sécurisés
-- Logs détaillés en backend
-- Fallback gracieux
-
----
-
-## 🧪 Tests
-
-### Test complet avec tous les métiers
-
-```bash
-#!/bin/bash
-
-METIERS=("plombier" "camping" "boulangerie" "restaurant" "artisan_batiment" "paysagiste" "jardinerie" "fabricant_pme")
-
-for metier in "${METIERS[@]}"; do
-  echo "Test $metier..."
-  curl -X POST http://localhost:5000/chat \
-    -H "Content-Type: application/json" \
-    -d "{\"message\": \"Bonjour\", \"metier\": \"$metier\"}"
-  echo "\n---\n"
-done
-```
-
-### Test de diagnostic
-
-```bash
-curl http://localhost:5000/diagnose | jq
-```
-
-Résultat attendu:
-```json
-{
-  "status": "ok",
-  "api_key_present": true,
-  "connectivity": {
-    "dns": "✓ Résolvé en 1.1.1.1",
-    "http": "✓ Status 200",
-    "anthropic_api": "✓ API fonctionne"
-  },
-  "errors": []
-}
-```
-
----
-
-## 📝 Structure du code
-
-### `mpsolutionsia_app.py`
-
-**Routes:**
-- `GET /health` - Health check
-- `GET /metiers` - Liste métiers
-- `GET /diagnose` - Diagnostic
-- `POST /chat` - Chat principal
-- `POST /reset` - Réinitialiser session
-
-**Fonctionnalités:**
-- Validation des requêtes
-- Gestion des conversations (avec session_id)
-- Gestion des erreurs API
-- Logging complet
-- Compatible Render
-
-### `mp_system_prompts.py`
-
-**Contient:**
-- 8 system prompts personnalisés (un par métier)
-- Fonction `get_system_prompt(metier)` pour charger le prompt
-- Fonction `get_available_metiers()` pour lister les métiers
-- Normalisation des noms de métiers
-
----
-
-## 🔄 Architecture
-
-```
-Utilisateur
-    ↓
-POST /chat
-{"message": "...", "metier": "plombier"}
-    ↓
-Charger system prompt (plombier)
-    ↓
-Appeler Claude Sonnet (Anthropic API)
-    ↓
-Retourner réponse
-    ↓
-Response JSON
-{"response": "...", "metier": "plombier"}
-```
-
----
-
-## 📈 Métriques
-
-- **Modèle:** Claude Sonnet 4.6
-- **Max tokens:** 1000 par réponse
-- **Timeout:** 60 secondes
-- **Retries:** 3 tentatives
-- **Sessions:** Illimitées (stockées en mémoire)
-
----
-
-## ⚠️ Limitations
-
-- Sessions stockées en mémoire (perdues au redémarrage)
-- Maximum 1000 tokens par réponse
-- Pas de persistance de base de données
-- Pas d'authentification (à ajouter en production)
-
-### Évolutions futures
-
-- Base de données (PostgreSQL/MongoDB) pour les sessions
-- Authentification utilisateur
-- Rate limiting
-- Analytics/logging
-- Personnalisation per-métier avancée
-
----
-
-## 🆘 Troubleshooting
-
-### "ANTHROPIC_API_KEY not found"
-
-```bash
-# Vérifier que .env existe
-ls -la .env
-
-# Vérifier que la clé est dedans
-cat .env | grep ANTHROPIC_API_KEY
-
-# Relancer après modification
-python mpsolutionsia_app.py
-```
-
-### "API returned 401 Unauthorized"
-
-- Clé API invalide ou expirée
-- Vérifier dans console Anthropic
-- Générer une nouvelle clé
-
-### "Connection timeout"
-
-- Problème de connexion réseau
-- Vérifier DNS
-- Tester: `curl https://api.anthropic.com`
-
-### "Métier non reconnu"
-
-```bash
-# Lister les métiers valides
-curl http://localhost:5000/metiers
-
-# Utiliser un métier de la liste
-curl -X POST http://localhost:5000/chat \
-  -H "Content-Type: application/json" \
-  -d '{"message": "...", "metier": "plombier"}'
-```
-
----
-
-## 📞 Support
-
-- Documenter dans `/diagnose`
-- Vérifier les logs de l'app
-- Tester chaque endpoint individuellement
-
----
-
-## ✅ Checklist déploiement
-
-- [ ] Fichier `.env` avec `ANTHROPIC_API_KEY`
-- [ ] `requirements.txt` à jour
-- [ ] `Procfile` présent
-- [ ] App testée en local
-- [ ] `GET /diagnose` retourne `"status": "ok"`
-- [ ] Repository GitHub créé
-- [ ] Web Service Render configuré
-- [ ] Variable `ANTHROPIC_API_KEY` ajoutée sur Render
-- [ ] Déploiement réussi
-- [ ] URL mpsolutionsia accessible
-
----
-
-**Prêt à déployer?** 🚀 Toute l'infrastructure est en place!
+- Sessions en mémoire : pas de persistance entre redéploiements.
+- Pas d'authentification ni de rate limiting.
+- Instance Render gratuite : mise en veille après inactivité, premier appel ~50 s.
+- Modèle : `claude-sonnet-4-6`, 1000 tokens max par réponse.
