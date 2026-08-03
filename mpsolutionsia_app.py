@@ -17,6 +17,15 @@ from mp_system_prompts import get_system_prompt, get_available_metiers
 load_dotenv()
 os.environ["PYTHONUTF8"] = "1"
 
+# Créer token.json vide si manquant (pour les agents qui le demandent au import)
+if not os.path.exists("token.json"):
+    try:
+        with open("token.json", "w") as f:
+            f.write("{}")
+    except Exception as e:
+        # Si on ne peut pas créer le fichier, on continue (Render peut ne pas avoir d'accès écriture)
+        pass
+
 # Logging
 logging.basicConfig(
     level=logging.INFO,
