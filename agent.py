@@ -3,6 +3,7 @@ import time
 import logging
 from dotenv import load_dotenv
 from anthropic import Anthropic
+from secureholiday_api import SecureHolidayAPI
 
 load_dotenv()
 
@@ -16,6 +17,9 @@ client = Anthropic(
     timeout=httpx.Timeout(60.0),
     max_retries=3
 )
+
+# Initialiser le client SecureHoliday
+sh_api = SecureHolidayAPI()
 
 REQUIRED_FIELDS = ["nom", "date_arrivee", "date_depart", "nb_personnes", "type_emplacement", "telephone"]
 
@@ -183,6 +187,37 @@ Réponds UNIQUEMENT en JSON valide avec ces clés (laisse vide si non mentionné
 
     return collected
 
+def verifier_disponibilite(date_arrivee: str, date_depart: str, type_emplacement: str) -> dict:
+    """Vérifie la disponibilité auprès de SecureHoliday."""
+    try:
+        # Normaliser le type d'hébergement
+        type_mapping = {
+            "emplacement": "emplacement",
+            "tente": "emplacement",
+            "caravane": "emplacement",
+            "camping-car": "emplacement",
+            "mobil-home": "mobil_home",
+            "tente lodge": "tente_lodge",
+            "safari": "tente_lodge",
+            "cyrus": "tente_lodge",
+            "bengali": "tente_lodge"
+        }
+
+        type_normalise = type_mapping.get(type_emplacement.lower(), "emplacement")
+
+        logger.info(f"Vérification dispo: {date_arrivee} → {date_depart}, type: {type_normalise}")
+
+        result = sh_api.check_availability(date_arrivee, date_depart, type_normalise)
+
+        if result.get("fallback"):
+            logger.warning(f"Fallback mode: {result.get('error')}")
+
+        return result
+
+    except Exception as e:
+        logger.error(f"Erreur vérification disponibilité: {str(e)}")
+        return {"available": None, "error": str(e), "fallback": True}
+
 def agent_camping(session_id, user_message):
     if session_id not in conversation_store:
         conversation_store[session_id] = []
@@ -195,6 +230,13 @@ def agent_camping(session_id, user_message):
 
     # Si toutes les infos sont collectées
     if not missing:
+        # Vérifier la disponibilité auprès de SecureHoliday
+        dispo_check = verifier_disponibilite(
+            collected.get('date_arrivee'),
+            collected.get('date_depart'),
+            collected.get('type_emplacement')
+        )
+
         recap = f"""Parfait ! Voici le récapitulatif de votre demande de réservation :
 
 ✦ Nom : {collected.get('nom', '')}
@@ -202,14 +244,48 @@ def agent_camping(session_id, user_message):
 ✦ Départ : {collected.get('date_depart', '')}
 ✦ Personnes : {collected.get('nb_personnes', '')}
 ✦ Hébergement : {collected.get('type_emplacement', '')}
-✦ Téléphone : {collected.get('telephone', '')}
+✦ Téléphone : {collected.get('telephone', '')}"""
 
-Votre demande a bien été enregistrée. Anthony vous contactera dans les plus brefs délais pour confirmer votre réservation.
+        # Ajouter le statut de disponibilité
+        if dispo_check.get("available") is True:
+            recap += f"""
+
+✓ DISPONIBLE ! Prix : {dispo_check.get('price', 'N/A')} {dispo_check.get('currency', 'EUR')}
+
+Votre réservation est confirmée ! Vous recevrez une confirmation par email/téléphone dans quelques instants.
 
 À très bientôt au Camping Les Eychecadous !
 
 Cordialement,
 Le Camping Les Eychecadous"""
+        elif dispo_check.get("available") is False:
+            recap += f"""
+
+✗ MALHEUREUSEMENT NON DISPONIBLE pour ces dates.
+
+Nous vous conseillons de :
+- Essayer d'autres dates
+- Contacter directement le camping : 05 67 44 51 65
+- Consulter notre calendrier : reservation.secureholiday.net/fr/5438/
+
+Merci de votre compréhension !
+
+Cordialement,
+Le Camping Les Eychecadous"""
+        else:
+            # Mode fallback si l'API n'est pas disponible
+            recap += f"""
+
+Votre demande a bien été enregistrée. Anthony vous contactera dans les plus brefs délais pour confirmer votre réservation et vérifier les disponibilités.
+
+À très bientôt au Camping Les Eychecadous !
+
+Cordialement,
+Le Camping Les Eychecadous"""
+
+        # Ajouter les infos de dispo pour le debug
+        collected['availability_check'] = dispo_check
+
         return {"response": recap, "collected": collected, "ready": True}
 
     # Répondre à la question posée si elle n'est pas liée à la réservation
