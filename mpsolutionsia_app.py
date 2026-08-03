@@ -30,11 +30,18 @@ app = Flask(__name__)
 
 # Client Anthropic avec timeouts pour Render
 api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
+logger.info(f"[STARTUP] ANTHROPIC_API_KEY présente: {bool(api_key)}")
+if api_key:
+    logger.info(f"[STARTUP] Clé API format: {api_key[:20]}...{api_key[-10:]}")
+else:
+    logger.error("[STARTUP] ⚠️  ANTHROPIC_API_KEY NOT SET! L'app ne fonctionnera pas sans elle!")
+
 client = Anthropic(
     api_key=api_key,
     timeout=httpx.Timeout(60.0),
     max_retries=3
 )
+logger.info("[STARTUP] Client Anthropic initialisé")
 
 # Stockage des conversations par session
 conversation_store = {}
@@ -42,8 +49,20 @@ conversation_store = {}
 
 @app.route("/health", methods=["GET"])
 def health():
-    """Health check endpoint."""
-    return jsonify({"status": "alive", "app": "mpsolutionsia"}), 200
+    """Health check endpoint with API key status."""
+    api_key_present = bool(os.getenv("ANTHROPIC_API_KEY", "").strip())
+    if api_key_present:
+        api_key_status = "configured"
+    else:
+        api_key_status = "missing"
+
+    return jsonify({
+        "status": "alive",
+        "app": "mpsolutionsia",
+        "api_key_set": api_key_present,
+        "api_key_status": api_key_status,
+        "endpoints": ["/health", "/metiers", "/chat", "/reset", "/diagnose"]
+    }), 200 if api_key_present else 503
 
 
 @app.route("/metiers", methods=["GET"])
@@ -126,14 +145,24 @@ def chat():
             "content": message
         })
 
+        # Vérifier que le client est initialisé
+        if not client:
+            raise Exception("Client Anthropic non initialisé - clé API manquante?")
+
         # Appeler l'API Anthropic
         logger.info(f"Appel API Anthropic pour {metier}...")
-        response = client.messages.create(
-            model="claude-sonnet-4-6",
-            max_tokens=1000,
-            system=system_prompt,
-            messages=conversation_store[session_id]
-        )
+        logger.debug(f"Messages: {conversation_store[session_id]}")
+
+        try:
+            response = client.messages.create(
+                model="claude-sonnet-4-6",
+                max_tokens=1000,
+                system=system_prompt,
+                messages=conversation_store[session_id]
+            )
+        except Exception as api_error:
+            logger.error(f"Erreur API: {type(api_error).__name__}: {str(api_error)}")
+            raise
 
         assistant_reply = response.content[0].text
         logger.info(f"Réponse reçue: {assistant_reply[:100]}...")
