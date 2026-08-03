@@ -1,6 +1,22 @@
 # Configuration SecureHoliday API
 
-Ce guide t'aide à configurer l'intégration de l'API SecureHoliday pour vérifier les disponibilités en temps réel.
+> ### ⚠️ Le code d'intégration n'est pas validé
+>
+> Les endpoints codés dans [secureholiday_api.py](./secureholiday_api.py) ont été **supposés, pas documentés**. Vérifié le 03/08/2026 : l'hôte `api.secureholiday.net` existe, mais `GET /establishments/5438/availability` renvoie **404**. Les chemins sont donc faux.
+>
+> Ctoutvert ne publie pas sa documentation : elle s'obtient en les contactant (voir [EMAIL_CTOUTVERT.md](./EMAIL_CTOUTVERT.md)). Quand elle arrivera, il faudra réécrire URLs, paramètres, authentification et parsing.
+>
+> ### 📍 Et pas dans ce dépôt
+>
+> Le chatbot du camping n'est pas servi par `agent-loop` mais par `chatbot-camping-eychecadous`. C'est là qu'une intégration SecureHoliday devra être branchée.
+>
+> ### ✅ En attendant, une solution déployée existe
+>
+> Le bot camping fournit déjà au client un lien SecureHoliday **pré-rempli avec ses dates**, qui affiche les disponibilités et les prix réels — sans aucune clé API. Voir `lien_reservation()` dans `chatbot-camping-eychecadous/app.py`.
+
+---
+
+Ce guide décrit comment obtenir les identifiants, une fois Ctoutvert contacté.
 
 ## 📋 Prérequis
 

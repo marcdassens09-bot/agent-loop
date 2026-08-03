@@ -1,3 +1,28 @@
+"""
+=============================================================================
+AVERTISSEMENT : CE MODULE N'A JAMAIS ETE VALIDE CONTRE L'API REELLE.
+=============================================================================
+
+Les endpoints, le schema d'authentification et le format des reponses ci-dessous
+ont ete SUPPOSES, pas documentes. Ctoutvert ne publie pas sa documentation API :
+elle s'obtient en les contactant (voir EMAIL_CTOUTVERT.md).
+
+Verifie le 03/08/2026 :
+  - l'hote api.secureholiday.net existe (serveur ASP.NET)
+  - GET /establishments/5438/availability  -> HTTP 404
+  Autrement dit, les chemins codes ici sont faux.
+
+A NE PAS UTILISER TEL QUEL EN PRODUCTION. Ce fichier est un squelette : quand
+la vraie documentation arrivera, il faudra reecrire les URLs, les parametres,
+l'authentification et le parsing. Seule la structure (une classe, un mode
+degrade, des timeouts) est reutilisable.
+
+Note : le chatbot du camping n'est pas servi par ce depot mais par
+C:\\Projets\\chatbot-camping-eychecadous. C'est la-bas qu'une integration
+SecureHoliday devra etre branchee.
+=============================================================================
+"""
+
 import os
 import requests
 import logging
