@@ -74,6 +74,12 @@ Deux agents à outils, distincts des chatbots à appel unique du dépôt :
   des pannes connues, diagnostique et propose le correctif sans rien modifier.
   `python agent_surveillance.py` = bilan complet (long : réveil des instances) ;
   `python agent_surveillance.py "question"` = test ciblé.
+- `agent_recette.py` — rejoue 5 questions-tests contre le bot camping et vérifie les
+  invariants (tarif 151,10 € au centime, jamais hotmail, identification IA, jamais de
+  promesse de dispo, linge non fourni). Vérifs déterministes + juge Claude pour les
+  critères subjectifs. **À lancer avant tout push du bot camping**
+  (`python agent_recette.py http://localhost:5000`) **et après chaque déploiement**
+  (`python agent_recette.py`). Code retour 0/1, utilisable en script.
 
 Le `.env` local est un endroit de plus à mettre à jour lors d'une rotation de clé
 (oublié le 03/08 → 401 en local le 05/08 alors que la prod tournait).
