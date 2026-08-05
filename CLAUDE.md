@@ -85,6 +85,15 @@ Deux agents à outils, distincts des chatbots à appel unique du dépôt :
   **avant tout push**). Code retour 0/1. Attention : un réveil d'instance gratuite peut
   dépasser le timeout et simuler une panne — revérifier un échec une fois l'instance chaude.
 
+- `agent_onboarding.py` — installe le chatbot d'un nouveau client : on lui décrit le
+  client en français libre, il génère un projet complet dans `C:\Projets\<slug>\` depuis
+  `modele_bot/` (Flask + boucle d'agent prête à outiller + phrase IA Act garantie +
+  README avec checklist Render) puis vérifie la conformité. **Règle d'or : il n'invente
+  jamais une info client** — le manquant est listé, pas comblé. Déploiement GitHub/Render
+  manuel, guidé par le README généré. Piège vérifié le 05/08 : la règle « jamais telle
+  adresse email » écrite telle quelle dans un fichier déclenche le détecteur de
+  conformité sur son propre texte — formuler les interdictions sans le mot interdit.
+
 Le `.env` local est un endroit de plus à mettre à jour lors d'une rotation de clé
 (oublié le 03/08 → 401 en local le 05/08 alors que la prod tournait).
 
