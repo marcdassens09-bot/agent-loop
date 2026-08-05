@@ -187,7 +187,14 @@ SYSTEM_PROMPT = (
 # 2. LA BOUCLE D'AGENT — le cœur du fichier.
 # ---------------------------------------------------------------------------
 
-def boucle_agent(question: str, max_tours: int = 10) -> str:
+def boucle_agent(question: str, max_tours: int = 10,
+                 outils=None, implementations=None, system=None) -> str:
+    """Boucle générique : réutilisable par d'autres agents du dépôt
+    (voir agent_surveillance.py) en passant leurs propres outils."""
+    outils = OUTILS if outils is None else outils
+    implementations = IMPLEMENTATIONS if implementations is None else implementations
+    system = SYSTEM_PROMPT if system is None else system
+
     messages = [{"role": "user", "content": question}]
     texte_final = ""
 
@@ -195,8 +202,8 @@ def boucle_agent(question: str, max_tours: int = 10) -> str:
         reponse = client.messages.create(
             model=MODELE,
             max_tokens=2048,
-            system=SYSTEM_PROMPT,
-            tools=OUTILS,
+            system=system,
+            tools=outils,
             messages=messages,
         )
 
@@ -219,7 +226,7 @@ def boucle_agent(question: str, max_tours: int = 10) -> str:
                 continue
             print(f"  [outil] {bloc.name}({json.dumps(bloc.input, ensure_ascii=False)})")
             try:
-                contenu = IMPLEMENTATIONS[bloc.name](**bloc.input)
+                contenu = implementations[bloc.name](**bloc.input)
                 erreur = False
             except Exception as e:
                 # On renvoie l'erreur à Claude (is_error) : il peut se corriger
