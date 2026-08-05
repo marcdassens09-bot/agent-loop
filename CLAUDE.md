@@ -62,6 +62,22 @@ python verifier_services.py
 Teste les 7 services Render qui appellent l'API Anthropic et distingue une vraie réponse
 d'un message de repli. À lancer avant et après toute rotation de clé.
 
+## Boucles d'agents (ajouté le 05/08/2026)
+
+Deux agents à outils, distincts des chatbots à appel unique du dépôt :
+
+- `agent_loop.py` — modèle pédagogique : Claude enchaîne des outils Python
+  (nuits, tarif emplacement camping, ping d'un service) jusqu'à la réponse finale.
+  Sa fonction `boucle_agent(question, outils=, implementations=, system=)` est
+  **générique** : tout nouvel agent du dépôt doit la réutiliser au lieu de recopier la boucle.
+- `agent_surveillance.py` — vérifie le parc via `verifier_services.py`, consulte un mémo
+  des pannes connues, diagnostique et propose le correctif sans rien modifier.
+  `python agent_surveillance.py` = bilan complet (long : réveil des instances) ;
+  `python agent_surveillance.py "question"` = test ciblé.
+
+Le `.env` local est un endroit de plus à mettre à jour lors d'une rotation de clé
+(oublié le 03/08 → 401 en local le 05/08 alors que la prod tournait).
+
 ## secureholiday_api.py n'est pas validé
 
 Ses endpoints ont été **supposés, pas documentés**. Vérifié : `api.secureholiday.net` existe,
