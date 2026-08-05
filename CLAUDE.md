@@ -74,12 +74,16 @@ Deux agents à outils, distincts des chatbots à appel unique du dépôt :
   des pannes connues, diagnostique et propose le correctif sans rien modifier.
   `python agent_surveillance.py` = bilan complet (long : réveil des instances) ;
   `python agent_surveillance.py "question"` = test ciblé.
-- `agent_recette.py` — rejoue 5 questions-tests contre le bot camping et vérifie les
-  invariants (tarif 151,10 € au centime, jamais hotmail, identification IA, jamais de
-  promesse de dispo, linge non fourni). Vérifs déterministes + juge Claude pour les
-  critères subjectifs. **À lancer avant tout push du bot camping**
-  (`python agent_recette.py http://localhost:5000`) **et après chaque déploiement**
-  (`python agent_recette.py`). Code retour 0/1, utilisable en script.
+- `agent_recette.py` — recette des 6 bots publics. Le camping a sa suite complète
+  (tarif 151,10 € au centime, jamais hotmail, identification IA, jamais de promesse de
+  dispo, linge non fourni) ; les autres passent les cas communs (identification IA,
+  vraie réponse pas de repli). Vérifs déterministes + juge Claude pour les critères
+  subjectifs — le juge ne présuppose pas l'activité du bot (leçon du 05/08 : un critère
+  « camping » codé en dur avait déclaré non conforme une réponse correcte du bot vitrine).
+  Usage : `python agent_recette.py` (tout le parc) ; `python agent_recette.py <nom-service>`
+  (un bot) ; `python agent_recette.py http://localhost:5000` (version locale du camping,
+  **avant tout push**). Code retour 0/1. Attention : un réveil d'instance gratuite peut
+  dépasser le timeout et simuler une panne — revérifier un échec une fois l'instance chaude.
 
 Le `.env` local est un endroit de plus à mettre à jour lors d'une rotation de clé
 (oublié le 03/08 → 401 en local le 05/08 alors que la prod tournait).
