@@ -22,17 +22,25 @@ S'il ne renvoie que `{"status":"alive"}`, c'est `app.py` qui tourne.
 campingartigat.com est servi par un dépôt séparé : `C:\Projets\chatbot-camping-eychecadous`.
 Toute modification du bot camping se fait là-bas, pas ici.
 
-## Le site vitrine non plus — et il vit HORS de C:\Projets
+## Le site vitrine non plus
 
-Deux dépôts, tous deux dans `C:\Users\marcd\` (vérifié le 04/08/2026) :
+Deux dépôts, tous deux dans `C:\Projets\` (**re-vérifié le 06/08/2026** — ils ont vécu un
+temps dans `C:\Users\marcd\`, ce n'est plus le cas) :
 
 | Dépôt | Rôle | Branche |
 |---|---|---|
-| `C:\Users\marcd\site-mpsolutions` | `index.html` statique, la bulle verte | `master` |
-| `C:\Users\marcd\assistant-mpsolutions` | backend Flask de la bulle — **le `SYSTEM_PROMPT` est là** | `master` |
+| `C:\Projets\site-mpsolutions` | `index.html` statique, la bulle verte | `master` |
+| `C:\Projets\assistant-mpsolutions` | backend Flask de la bulle — **le `SYSTEM_PROMPT` est là** | `master` |
 
 La bulle du site appelle `assistant-mpsolutions.onrender.com`. Modifier le discours du bot
 vitrine = modifier `assistant-mpsolutions`, jamais `site-mpsolutions`.
+
+`site-mpsolutions` sert **mpsolutionsia.fr** (domaine personnalisé Render sur le service
+`site-mpsolutions`, HTTPS actif depuis le 06/08/2026). Le dépôt ne contient qu'`index.html` :
+`widget.js` a été supprimé, il n'était chargé par aucune page. Deux pièges de ce dépôt sont
+documentés en mémoire — il a **deux commits racines sans ancêtre commun**, et le cache de
+build de Render **conserve les fichiers supprimés** tant qu'on ne fait pas
+« Clear build cache & deploy ».
 
 **`C:\Projets\mon-premier-IA` est un clone obsolète** de `chatbot-ia-cleanpro` (même remote,
 code plus ancien). Ne jamais y committer.
