@@ -16,7 +16,7 @@ CHARTE_PAR_DEFAUT = {
     "identite": {
         "nom": "MP Solutions IA",
         "tagline": "Ecouter, comprendre, servir — en toute transparence.",
-        "email": "mpsolutionsia@gmail.com",
+        "email": "contact@mpsolutionsia.fr",
         "lieu": "Artigat (09130)",
         "logo": "logo_complet.png"
     },
@@ -34,7 +34,7 @@ CHARTE_PAR_DEFAUT = {
     "mise_en_page": {
         "format": "PDF via ReportLab uniquement",
         "header": "Logo MP Solutions IA sur chaque page",
-        "footer": "mpsolutionsia@gmail.com + SIRET sur chaque page",
+        "footer": "contact@mpsolutionsia.fr + SIRET sur chaque page",
         "style": "Aéré, propre et simple — pas de tableaux colorés",
         "prefixes_sections": ">> pour observations | ++ pour propositions | -> pour signature",
         "icones_autorises": ["✓", "✦", "▸", "●", "◆", "—"],
@@ -51,7 +51,7 @@ CHARTE_PAR_DEFAUT = {
     "structure_docteur": {
         "observer": ">> CE QUE J'OBSERVE — Diagnostiquer le problème concret du client",
         "proposer": "++ CE QUE JE PROPOSE — Solution précise avec prix clair",
-        "signer": "-> Marc-Paul Dassens — mpsolutionsia@gmail.com — Artigat (09130)"
+        "signer": "-> Marc-Paul Dassens — contact@mpsolutionsia.fr — Artigat (09130)"
     },
     "preview_rule": {
         "etape_1": "Générer une image de chaque page (pdftoppm → PIL → JPG)",

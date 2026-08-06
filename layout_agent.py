@@ -18,7 +18,7 @@ CHARTE = {
     "couleur_principale": "#1b3a2b",   # vert foncé
     "couleur_accent":     "#E8730A",   # orange
     "couleur_fond":       "#FFFFFF",   # blanc
-    "email":              "mpsolutionsia@gmail.com",
+    "email":              "contact@mpsolutionsia.fr",
     "tagline":            "Ecouter, comprendre, servir — en toute transparence.",
     "auteur":             "Marc-Paul Dassens",
     "ville":              "Artigat (09130)",

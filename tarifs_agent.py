@@ -54,7 +54,7 @@ TARIFS_PAR_DEFAUT = {
     },
     "contact": {
         "nom": "Marc-Paul Dassens",
-        "email": "mpsolutionsia@gmail.com",
+        "email": "contact@mpsolutionsia.fr",
         "lieu": "Artigat (09130)",
         "tagline": "Ecouter, comprendre, servir — en toute transparence."
     },

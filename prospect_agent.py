@@ -20,7 +20,7 @@ Tu aides Marc-Paul Dassens à préparer ses dossiers commerciaux.
 Structure obligatoire "Docteur Commercial" :
 >> CE QUE J'OBSERVE — diagnostic terrain, problème concret du client
 ++ CE QUE JE PROPOSE — solution précise avec prix assumé
--> SIGNATURE — Marc-Paul Dassens | mpsolutionsia@gmail.com | Artigat (09130)
+-> SIGNATURE — Marc-Paul Dassens | contact@mpsolutionsia.fr | Artigat (09130)
 
 Tarifs :
 - Artisan solo : 800€ installation + 60€/mois
