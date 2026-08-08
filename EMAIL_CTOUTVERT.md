@@ -1,95 +1,97 @@
-# 📧 Demande d'accès API SecureHoliday
+# Demande d'accès API SecureHoliday — Camping Les Eychecadous
 
-**À envoyer à:** commercial@ctoutvert.com
+**Destinataire :** commercial@ctoutvert.com
+**Téléphone :** +33 5 61 47 23 53
 
----
-
-## SUJET DE L'EMAIL:
-
-```
-Demande d'accès API SecureHoliday - Camping Les Eychecadous (ID: 5438)
-```
+> Prêt à envoyer. SIRET vérifié au registre public le 08/08/2026.
 
 ---
 
-## CORPS DE L'EMAIL:
+## Objet
+
+```
+Demande d'accès API SecureHoliday — Camping Les Eychecadous (établissement 5438)
+```
+
+## Corps du message
 
 ```
 Bonjour,
 
-Je suis en charge du développement des outils digitaux pour le Camping Les Eychecadous 
-(établissement ID: 5438) situé à Artigat en Ariège.
+Je suis prestataire du Camping Les Eychecadous (établissement 5438, Artigat,
+Ariège), pour lequel j'ai développé et mis en service un assistant
+conversationnel qui répond aux questions des vacanciers.
 
-Nous souhaitons intégrer l'API SecureHoliday à notre chatbot IA pour:
-- Vérifier les disponibilités en temps réel
-- Afficher les tarifs automatiquement
-- Améliorer l'expérience client lors des réservations en ligne
+Cet assistant oriente aujourd'hui les visiteurs vers votre page de
+réservation avec leurs dates pré-remplies. Nous souhaitons aller plus loin
+et afficher directement les disponibilités et les tarifs dans la
+conversation, ce qui suppose un accès à votre API.
 
-DÉTAILS DE LA DEMANDE:
+Pourriez-vous m'indiquer la marche à suivre, et me transmettre :
 
-Établissement:
-- Nom: Camping Les Eychecadous
-- ID: 5438
-- URL réservation: https://reservation.secureholiday.net/fr/5438/
-- Localisation: Artigat (09130), Ariège
+1. la documentation technique de l'API SecureHoliday ;
+2. les modalités d'authentification et d'obtention des identifiants ;
+3. l'accès à un environnement de test, s'il en existe un ;
+4. le contact technique à qui adresser les questions d'intégration.
 
-Besoin technique:
-- Accès à l'API SecureHoliday pour les développeurs
-- Documentation technique complète
-- Authentification API (clés d'accès)
-- Sandbox/environnement de test
-- Endpoints pour vérifier les disponibilités et créer des réservations
+Le camping confirmera bien entendu cette demande de son côté si vous le
+souhaitez, s'agissant de son établissement et de ses données.
 
-Utilisation:
-- Application Python/Flask
-- Intégration chatbot IA
-- Vérification temps réel des disponibilités
-
-Contact développeur:
-- Email: marcdassens09@gmail.com
-- Projet: Agent-loop (chatbot de réservation)
-
-QUESTIONS:
-
-Pouvez-vous nous fournir:
-1. La documentation technique complète de l'API
-2. Les identifiants d'accès (clés API)
-3. L'accès au sandbox de test
-4. Un contact technique pour les questions d'intégration
-
-Merci d'avance! Je reste à disposition pour toute information complémentaire.
+Je reste à votre disposition.
 
 Cordialement,
-Marc D'Assens
+
+Marc-Paul Dassens
+MP Solutions IA — micro-entreprise
+SIRET 108 354 739 00014
+09130 Artigat, Ariège
+contact@mpsolutionsia.fr
+https://mpsolutionsia.fr
 ```
 
 ---
 
-## 📞 OU APPELER:
+## Pourquoi cette version
 
-**Téléphone:** +33 5 61 47 23 53
+Le brouillon précédent se présentait comme « en charge du développement des
+outils digitaux » avec une adresse Gmail, et réclamait des clés API dès le
+premier message. Un éditeur ne remet pas d'accès technique à un inconnu :
+il vérifie d'abord à qui il parle, et surtout si le titulaire du compte est
+d'accord.
 
-**À dire:** "Je suis client SecureHoliday (camping 5438) et j'ai besoin de l'accès API pour une intégration chatbot."
+Cette version corrige trois points :
 
----
+- **une identité vérifiable** — raison sociale, SIRET, domaine, adresse
+  professionnelle. C'est ce qui distingue un prestataire d'un curieux ;
+- **une demande proportionnée** — on demande la marche à suivre et la
+  documentation, pas des clés de production d'emblée ;
+- **le mandat du camping évoqué d'entrée** — c'est la question que Ctoutvert
+  posera de toute façon, autant y répondre avant qu'elle soit posée.
 
-## ✅ CHECKLIST:
+## Le point qui décide
 
-- [ ] Email copié
-- [ ] Personnalisé avec tes coordonnées
-- [ ] Envoyé à commercial@ctoutvert.com
-- [ ] Ou appel passé au +33 5 61 47 23 53
-- [ ] Réponse reçue
-- [ ] Clés API notées
+Ctoutvert traitera plus vite si la demande vient **du camping** ou si le
+camping est en copie : c'est son établissement, son contrat, ses données.
+Le plus efficace est de demander au gérant de mettre `contact@mpsolutionsia.fr`
+en copie d'un message envoyé depuis son adresse, ou de te mandater par écrit.
 
----
+Le téléphone reste plus rapide que l'e-mail pour ce type de demande.
+À dire : « Je suis le prestataire technique du camping 5438, je cherche à
+savoir si une API est disponible et à quelles conditions. »
 
-## 🚀 UNE FOIS LES CLÉS REÇUES:
+## Quand les identifiants arriveront
 
-Tu recevras quelque chose comme:
-```
-SECUREHOLIDAY_API_KEY=sk_live_xxxxxxxxxxxxx
-SECUREHOLIDAY_API_SECRET=sh_secret_xxxxxxxxxxxxx
-```
+Ils vont dans le fichier `.env` du dépôt `chatbot-camping-eychecadous`, jamais
+en dur dans le code et jamais collés dans une conversation. Voir
+[SECUREHOLIDAY_SETUP.md](./SECUREHOLIDAY_SETUP.md) pour la suite, et garder en
+tête que les endpoints actuels de `secureholiday_api.py` sont **supposés et
+faux** : tout sera à réécrire d'après la documentation reçue.
 
-Viens me les montrer et je mets à jour le `.env` et on teste! ✨
+## Suivi
+
+- [x] SIRET renseigné dans le message
+- [ ] Camping informé, mandat ou mise en copie obtenue
+- [ ] Message envoyé à commercial@ctoutvert.com
+- [ ] Relance téléphonique au +33 5 61 47 23 53 si sans réponse sous une semaine
+- [ ] Documentation reçue
+- [ ] `secureholiday_api.py` réécrit d'après la documentation

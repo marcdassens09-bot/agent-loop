@@ -50,7 +50,7 @@ TARIFS_PAR_DEFAUT = {
         "preavis_resiliation": "1 mois",
         "paiement": "Virement bancaire ou chèque",
         "delai_livraison": "7 à 14 jours ouvrés après signature",
-        "siret": "en cours de réception"
+        "siret": "108 354 739 00014"
     },
     "contact": {
         "nom": "Marc-Paul Dassens",
