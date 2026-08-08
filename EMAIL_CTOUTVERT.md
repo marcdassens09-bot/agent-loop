@@ -7,13 +7,69 @@
 
 ---
 
-## Objet
+## Version 1 — envoyée par Anthony (recommandée)
+
+C'est la sienne, sur son compte SecureHoliday : Ctoutvert répond plus vite et
+sans poser de question de mandat quand la demande vient directement du
+titulaire. À lui transmettre pour qu'il l'envoie depuis sa propre adresse,
+en mettant `contact@mpsolutionsia.fr` en copie — la réponse de Ctoutvert
+arrive alors aux deux en même temps.
+
+### À copier-coller
+
+```
+Objet : Demande d'accès API SecureHoliday — Camping Les Eychecadous (établissement 5438)
+
+Bonjour,
+
+Je suis le gérant du Camping Les Eychecadous (établissement 5438), à
+Artigat en Ariège.
+
+Nous travaillons avec un prestataire technique, MP Solutions IA (Marc-Paul
+Dassens), qui a mis en place l'assistant conversationnel de notre site. Il
+oriente aujourd'hui nos visiteurs vers notre page de réservation
+SecureHoliday avec leurs dates pré-remplies.
+
+Nous souhaitons aller plus loin et afficher directement les disponibilités
+et les tarifs dans la conversation, ce qui suppose un accès à l'API
+SecureHoliday liée à notre établissement.
+
+Pourriez-vous transmettre à mon prestataire, que je mets en copie de ce
+message :
+
+1. la documentation technique de l'API SecureHoliday ;
+2. les modalités d'authentification et d'obtention des identifiants ;
+3. l'accès à un environnement de test, s'il en existe un ;
+4. le contact technique à qui adresser les questions d'intégration.
+
+Je confirme par la présente que MP Solutions IA est autorisé à échanger
+avec vous sur ce sujet pour le compte du Camping Les Eychecadous.
+
+Cordialement,
+
+Anthony Viviano
+Camping Les Eychecadous
+Artigat (09130), Ariège
+campingartigat@gmail.com
+```
+
+Prête à envoyer telle quelle.
+
+---
+
+## Version 2 — envoyée par Marc-Paul (repli)
+
+À utiliser seulement si Anthony préfère ne pas écrire lui-même. Moins
+efficace : Ctoutvert demandera probablement une confirmation du camping
+avant de répondre, ce que la version 1 évite.
+
+### Objet
 
 ```
 Demande d'accès API SecureHoliday — Camping Les Eychecadous (établissement 5438)
 ```
 
-## Corps du message
+### Corps du message
 
 ```
 Bonjour,
@@ -53,27 +109,12 @@ https://mpsolutionsia.fr
 
 ## Pourquoi cette version
 
-Le brouillon précédent se présentait comme « en charge du développement des
-outils digitaux » avec une adresse Gmail, et réclamait des clés API dès le
-premier message. Un éditeur ne remet pas d'accès technique à un inconnu :
-il vérifie d'abord à qui il parle, et surtout si le titulaire du compte est
-d'accord.
-
-Cette version corrige trois points :
-
-- **une identité vérifiable** — raison sociale, SIRET, domaine, adresse
-  professionnelle. C'est ce qui distingue un prestataire d'un curieux ;
-- **une demande proportionnée** — on demande la marche à suivre et la
-  documentation, pas des clés de production d'emblée ;
-- **le mandat du camping évoqué d'entrée** — c'est la question que Ctoutvert
-  posera de toute façon, autant y répondre avant qu'elle soit posée.
-
-## Le point qui décide
-
-Ctoutvert traitera plus vite si la demande vient **du camping** ou si le
-camping est en copie : c'est son établissement, son contrat, ses données.
-Le plus efficace est de demander au gérant de mettre `contact@mpsolutionsia.fr`
-en copie d'un message envoyé depuis son adresse, ou de te mandater par écrit.
+Un éditeur ne remet pas d'accès technique à un inconnu : il vérifie d'abord
+à qui il parle, et surtout si le titulaire du compte est d'accord. La
+version 1 répond à cette question avant qu'elle soit posée — c'est
+pourquoi elle est recommandée. La version 2 reste utile si Anthony n'a pas
+le temps ou préfère déléguer, mais elle repose sur une identité vérifiable
+(raison sociale, SIRET, domaine) plutôt que sur le mandat direct.
 
 Le téléphone reste plus rapide que l'e-mail pour ce type de demande.
 À dire : « Je suis le prestataire technique du camping 5438, je cherche à
@@ -89,9 +130,9 @@ faux** : tout sera à réécrire d'après la documentation reçue.
 
 ## Suivi
 
-- [x] SIRET renseigné dans le message
-- [ ] Camping informé, mandat ou mise en copie obtenue
-- [ ] Message envoyé à commercial@ctoutvert.com
-- [ ] Relance téléphonique au +33 5 61 47 23 53 si sans réponse sous une semaine
+- [x] SIRET renseigné dans le message (version 2)
+- [x] Nom de famille d'Anthony renseigné (version 1)
+- [x] Version 1 envoyée par Anthony le 08/08/2026, `contact@mpsolutionsia.fr` en copie
+- [ ] Relance téléphonique au +33 5 61 47 23 53 si sans réponse sous une semaine (relancer à partir du 15/08/2026)
 - [ ] Documentation reçue
 - [ ] `secureholiday_api.py` réécrit d'après la documentation
