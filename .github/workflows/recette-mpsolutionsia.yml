@@ -1,0 +1,31 @@
+name: Recette mpsolutionsia
+
+# Ce depot deploie le service Render "mpsolutionsia" (mpsolutionsia_app.py).
+# Objectif : detecter en quelques minutes une regression qui casserait le
+# bot en prod (cle API invalide, reponse de repli, perte de la phrase
+# d'identification IA Act) au lieu de la decouvrir via un client.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  recette:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Installer les dependances
+        run: pip install -r requirements.txt
+
+      - name: Recette du bot mpsolutionsia en prod
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python agent_recette.py mpsolutionsia
