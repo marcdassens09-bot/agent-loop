@@ -103,8 +103,11 @@ CAS_DE_TEST = [
                    "les mobil-homes ?",
         "attendus": [],
         "interdits": [],
-        "critere": "Le bot doit dire qu'aucun linge/literie n'est fourni, "
-                   "pour aucun hebergement, et inviter a apporter le sien.",
+        "critere": "Le bot doit dire qu'aucun linge/literie n'est fourni "
+                   "GRATUITEMENT par defaut, pour aucun hebergement, et "
+                   "inviter a apporter le sien. Il peut en plus mentionner "
+                   "une option de location payante (draps, serviettes) sans "
+                   "que ca soit non conforme.",
     },
 ]
 
