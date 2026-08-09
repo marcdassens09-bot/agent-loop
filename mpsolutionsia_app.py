@@ -155,8 +155,9 @@ def chat():
 
         try:
             response = client.messages.create(
-                model="claude-sonnet-4-6",
+                model="claude-sonnet-5",
                 max_tokens=1000,
+                thinking={"type": "disabled"},
                 system=system_prompt,
                 messages=conversation_store[session_id]
             )
@@ -266,8 +267,9 @@ def diagnose():
         logger.info("Test 3: Test appel API Anthropic...")
         try:
             response = client.messages.create(
-                model="claude-sonnet-4-6",
+                model="claude-sonnet-5",
                 max_tokens=10,
+                thinking={"type": "disabled"},
                 messages=[{"role": "user", "content": "Hi"}]
             )
             diagnostics["connectivity"]["anthropic_api"] = "✓ API fonctionne"
