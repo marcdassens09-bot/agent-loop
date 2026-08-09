@@ -70,6 +70,13 @@ python verifier_services.py
 Teste les 7 services Render qui appellent l'API Anthropic et distingue une vraie réponse
 d'un message de repli. À lancer avant et après toute rotation de clé.
 
+Depuis le 09/08/2026, `.github/workflows/recette-mpsolutionsia.yml` relance
+`agent_recette.py mpsolutionsia` automatiquement à chaque push sur `main` (secret GitHub
+`ANTHROPIC_API_KEY` requis). Attention au faux positif/négatif juste après un push : Render
+met ~45 s à finir son déploiement, la CI peut taper l'ancien code encore en ligne ou le
+nouveau pas encore stabilisé — ne pas conclure sur le tout premier run, relancer
+(« Re-run all jobs ») une fois certain que le déploiement est terminé.
+
 ## Boucles d'agents (ajouté le 05/08/2026)
 
 Deux agents à outils, distincts des chatbots à appel unique du dépôt :
@@ -114,8 +121,16 @@ mais les chemins codés renvoient 404. Ctoutvert fournit sa documentation sur de
 ## Conventions
 
 - Clé API dans `.env` (non versionné), jamais en dur.
-- Modèle : `claude-sonnet-4-6`.
-- Les instances Render gratuites s'endorment : prévoir ~50 s au premier appel.
+- Modèle : `claude-sonnet-5` (migré le 09/08/2026, tous les bots publics du parc). Sur ce
+  modèle, `thinking` est activé par défaut si on ne le précise pas — ajouter
+  `thinking={"type": "disabled"}` sur les appels à `max_tokens` serré, sinon le
+  raisonnement peut manger le budget avant la réponse. Vérifier aussi la version du SDK
+  `anthropic` dans `requirements.txt` : une version trop ancienne ne connaît pas ce
+  paramètre (`TypeError`, vécu en prod sur `mpsolutionsia` le 09/08, voir mémoire
+  `migration-sonnet-5-bots`).
+- Les instances Render gratuites s'endorment : prévoir ~50 s au premier appel. Un ping
+  UptimeRobot (5 min) est en place depuis le 09/08 sur les 6 bots publics + `agent-loop`,
+  ça limite le risque mais ne l'élimine pas totalement.
 - Un correctif n'est « fait » que **commité et poussé** : vérifier `git show HEAD:fichier`,
   pas le fichier sur disque. (Le 03/08, la phrase IA Act du camping a dormi 24 h en local
   pendant que la prod tournait sans elle.)

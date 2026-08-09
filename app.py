@@ -150,8 +150,9 @@ def diagnose():
             test_api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
             test_client = Anthropic(api_key=test_api_key, timeout=httpx.Timeout(30.0))
             response = test_client.messages.create(
-                model="claude-sonnet-4-6",
+                model="claude-sonnet-5",
                 max_tokens=10,
+                thinking={"type": "disabled"},
                 messages=[{"role": "user", "content": "Hi"}]
             )
             diagnostics["connectivity"]["anthropic_api"] = "✓ API fonctionne"

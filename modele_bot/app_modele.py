@@ -22,7 +22,11 @@ limiter = Limiter(get_remote_address, app=app, default_limits=["20 per minute"])
 client = Anthropic(api_key=(os.environ.get("ANTHROPIC_API_KEY") or "").strip())
 conversation_store = {}
 
-MODELE = "claude-sonnet-4-6"
+MODELE = "claude-sonnet-5"
+# Sur Sonnet 5, thinking est actif par defaut si on ne le precise pas : sur des
+# max_tokens serres (50, 700 ici) le raisonnement peut manger le budget avant
+# la reponse. On le desactive sur chaque appel.
+THINKING = {"type": "disabled"}
 
 # ---------------------------------------------------------------------------
 # Outils (boucle d'agent). Vide au depart : le bot repond comme un chatbot
@@ -66,7 +70,7 @@ def health():
 def diagnose():
     try:
         client.messages.create(
-            model=MODELE, max_tokens=50,
+            model=MODELE, max_tokens=50, thinking=THINKING,
             messages=[{"role": "user", "content": "Reponds simplement par 'OK'"}],
         )
         return jsonify({"status": "OK", "message": "Connexion Anthropic fonctionnelle"})
@@ -99,12 +103,14 @@ def chat():
             reponse = client.messages.create(
                 model=MODELE,
                 max_tokens=700,
+                thinking=THINKING,
                 system=PROMPT_SYSTEME,
                 tools=OUTILS,
                 messages=messages_api,
             ) if OUTILS else client.messages.create(
                 model=MODELE,
                 max_tokens=700,
+                thinking=THINKING,
                 system=PROMPT_SYSTEME,
                 messages=messages_api,
             )
