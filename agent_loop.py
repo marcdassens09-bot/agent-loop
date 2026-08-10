@@ -31,6 +31,13 @@ import requests
 from dotenv import load_dotenv
 from anthropic import Anthropic
 
+# La console Windows encode en cp1252 par defaut : un emoji dans une reponse
+# de Claude fait planter le print() de boucle_agent en UnicodeEncodeError,
+# pour tous les scripts qui reutilisent cette boucle (agent_onboarding.py,
+# agent_surveillance.py...). On force l'UTF-8 sur la sortie.
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 # Charger le .env qui est À CÔTÉ de ce script, peu importe d'où on lance la commande
 load_dotenv(Path(__file__).parent / ".env")
 
