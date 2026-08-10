@@ -33,3 +33,13 @@ Bot généré par l'agent d'onboarding MP Solutions IA le {{DATE_GENERATION}}.
 - Email de contact : uniquement l'adresse officielle validée par le client
   (jamais une ancienne adresse — vérifier avec `agent_recette.py`).
 - Le bot ne promet jamais ce qu'il ne peut pas vérifier (dispo, stock, délai).
+
+## Niveau d'autonomie de ce bot
+
+Ce bot est niveau **observation/préparation** : il répond aux questions des
+visiteurs, mais ne modifie rien et n'agit sur aucun système externe (pas
+d'email envoyé, pas de réservation prise, pas de paiement). `OUTILS` est vide
+dans `app.py`.
+
+Si un outil qui **agit** (envoi de mail, prise de réservation...) est ajouté
+plus tard, mettre à jour cette section pour refléter le nouveau niveau.
