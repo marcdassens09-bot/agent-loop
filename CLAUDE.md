@@ -112,6 +112,24 @@ Deux agents à outils, distincts des chatbots à appel unique du dépôt :
 Le `.env` local est un endroit de plus à mettre à jour lors d'une rotation de clé
 (oublié le 03/08 → 401 en local le 05/08 alors que la prod tournait).
 
+## Environnement WSL (ajouté le 10/08/2026)
+
+Un environnement Linux est disponible en plus de Windows, pour coller à ce que Render
+exécute en prod. Ubuntu 26.04 LTS via WSL2, utilisateur `marcd`.
+
+- Le venv Python est dans **`~/venvs/agent-loop`** (système de fichiers Linux natif),
+  **pas** sur `/mnt/c` : `python -m venv` y échoue (`ensurepip` plante) à cause des
+  limitations de symlinks du système de fichiers Windows monté (DrvFs).
+- Le code reste sur `/mnt/c/Projets/agent-loop` (le même dossier Windows qu'aujourd'hui,
+  rien à dupliquer) ; le `.env` s'y lit tel quel depuis WSL, pas de copie de clé à gérer.
+- Activation :
+  ```bash
+  source ~/venvs/agent-loop/bin/activate
+  cd /mnt/c/Projets/agent-loop
+  ```
+- Vérifié bout-en-bout le 10/08/2026 : `python3 agent_loop.py` (question par défaut)
+  donne bien 151,10 € — cohérent avec le cas de référence camping d'`agent_recette.py`.
+
 ## secureholiday_api.py n'est pas validé
 
 Ses endpoints ont été **supposés, pas documentés**. Vérifié : `api.secureholiday.net` existe,
