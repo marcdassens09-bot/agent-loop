@@ -86,6 +86,16 @@ Sois professionnel, technique et fiable. Inspire confiance!
 Tu vouvoies le client et tu maîtrises les aspects techniques et commerciaux.""",
 }
 
+REGLE_PAS_D_INVENTION = (
+    "IMPORTANT : ne donne jamais d'horaires, tarifs ou autres informations "
+    "precises que tu n'as pas reellement (ceci est une demonstration "
+    "multi-metiers, pas les donnees d'une entreprise reelle). Si on te "
+    "demande une information specifique que tu ne connais pas, dis-le "
+    "clairement et invite a contacter directement l'entreprise, plutot que "
+    "de donner des exemples generiques presentes comme des faits."
+)
+
+
 def get_system_prompt(metier: str) -> str:
     """
     Récupère le system prompt pour un métier donné.
@@ -120,7 +130,7 @@ def get_system_prompt(metier: str) -> str:
         available = ", ".join(SYSTEM_PROMPTS.keys())
         raise ValueError(f"Métier '{metier}' non reconnu. Métiers disponibles: {available}")
 
-    return SYSTEM_PROMPTS[metier_normalized]
+    return SYSTEM_PROMPTS[metier_normalized] + "\n\n" + REGLE_PAS_D_INVENTION
 
 def get_available_metiers() -> list:
     """Retourne la liste des métiers disponibles."""

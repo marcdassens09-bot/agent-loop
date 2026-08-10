@@ -27,6 +27,12 @@ import time
 
 import requests
 
+# La console Windows encode en cp1252 par defaut : un bot qui repond avec un
+# emoji fait planter tous les print() en UnicodeEncodeError avant la fin de
+# la recette. On force l'UTF-8 sur la sortie, quelle que soit la console.
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 # Reutilise le client Anthropic et le modele configures dans agent_loop.py
 from agent_loop import client, MODELE
 
