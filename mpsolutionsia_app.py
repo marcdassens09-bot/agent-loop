@@ -4,6 +4,7 @@ Route POST /chat avec système de métiers multiples.
 """
 
 import os
+import re
 import logging
 import traceback
 import sys
@@ -24,6 +25,16 @@ logging.basicConfig(
     stream=sys.stdout
 )
 logger = logging.getLogger(__name__)
+
+
+def filtrer_donnees_sensibles(texte):
+    if not texte or not isinstance(texte, str):
+        return str(texte) if texte else ""
+    texte = re.sub(r'[\w\.-]+@[\w\.-]+\.\w+', '[EMAIL MASQUE]', texte)
+    texte = re.sub(r'\b0[1-9](\s?\d{2}){4}\b', '[TELEPHONE MASQUE]', texte)
+    texte = re.sub(r'\b(?:\d[ -]?){13,16}\b', '[CARTE MASQUEE]', texte)
+    return texte
+
 
 # Application Flask
 app = Flask(__name__)
@@ -102,7 +113,8 @@ def chat():
     try:
         logger.info("=== Début requête /chat ===")
         data = request.get_json()
-        logger.info(f"Données reçues: {data}")
+        data_masque = {k: (filtrer_donnees_sensibles(v) if isinstance(v, str) else v) for k, v in (data or {}).items()}
+        logger.info(f"Données reçues: {data_masque}")
 
         # Validation des champs requis
         if not data:
@@ -121,7 +133,7 @@ def chat():
         metier = data["metier"]
         session_id = data.get("session_id", f"default_{metier}")
 
-        logger.info(f"Session: {session_id}, Métier: {metier}, Message: {message[:50]}...")
+        logger.info(f"Session: {session_id}, Métier: {metier}, Message: {filtrer_donnees_sensibles(message)[:50]}...")
 
         # Valider le métier
         try:
@@ -166,7 +178,7 @@ def chat():
             raise
 
         assistant_reply = response.content[0].text
-        logger.info(f"Réponse reçue: {assistant_reply[:100]}...")
+        logger.info(f"Réponse reçue: {filtrer_donnees_sensibles(assistant_reply)[:100]}...")
 
         # Stocker la réponse
         conversation_store[session_id].append({
