@@ -36,6 +36,21 @@ def filtrer_donnees_sensibles(texte):
     return texte
 
 
+def _dernier_bloc_en_cache(messages):
+    """Pose un marqueur de cache sur le dernier bloc du dernier message.
+    Gratuit si la conversation est encore courte (le minimum cache sur
+    Sonnet 5 est d'environ 1024 tokens) ; sur un echange qui s'allonge, evite
+    de repayer plein tarif tout l'historique deja envoye a chaque tour."""
+    dernier = messages[-1]
+    contenu = dernier["content"]
+    if isinstance(contenu, str):
+        blocs = [{"type": "text", "text": contenu, "cache_control": {"type": "ephemeral"}}]
+    else:
+        blocs = list(contenu)
+        blocs[-1] = {**blocs[-1], "cache_control": {"type": "ephemeral"}}
+    return messages[:-1] + [{**dernier, "content": blocs}]
+
+
 # Application Flask
 app = Flask(__name__)
 
@@ -157,6 +172,10 @@ def chat():
             "content": message
         })
 
+        # Empeche l'historique de grossir indefiniment (cout + memoire serveur)
+        if len(conversation_store[session_id]) > 20:
+            conversation_store[session_id] = conversation_store[session_id][-20:]
+
         # Vérifier que le client est initialisé
         if not client:
             raise Exception("Client Anthropic non initialisé - clé API manquante?")
@@ -171,7 +190,7 @@ def chat():
                 max_tokens=1000,
                 thinking={"type": "disabled"},
                 system=system_prompt,
-                messages=conversation_store[session_id]
+                messages=_dernier_bloc_en_cache(conversation_store[session_id])
             )
         except Exception as api_error:
             logger.error(f"Erreur API: {type(api_error).__name__}: {str(api_error)}")

@@ -194,6 +194,21 @@ SYSTEM_PROMPT = (
 # 2. LA BOUCLE D'AGENT — le cœur du fichier.
 # ---------------------------------------------------------------------------
 
+def _dernier_bloc_en_cache(messages):
+    """Pose un marqueur de cache sur le dernier bloc du dernier message.
+    Gratuit si l'historique est encore court (le minimum cache sur Sonnet 5
+    est d'environ 1024 tokens) ; sur un echange qui s'allonge (plusieurs
+    tours d'outils), evite de repayer plein tarif ce qui a deja ete envoye."""
+    dernier = messages[-1]
+    contenu = dernier["content"]
+    if isinstance(contenu, str):
+        blocs = [{"type": "text", "text": contenu, "cache_control": {"type": "ephemeral"}}]
+    else:
+        blocs = list(contenu)
+        blocs[-1] = {**blocs[-1], "cache_control": {"type": "ephemeral"}}
+    return messages[:-1] + [{**dernier, "content": blocs}]
+
+
 def boucle_agent(question: str, max_tours: int = 10,
                  outils=None, implementations=None, system=None) -> str:
     """Boucle générique : réutilisable par d'autres agents du dépôt
@@ -211,7 +226,7 @@ def boucle_agent(question: str, max_tours: int = 10,
             max_tokens=2048,
             system=system,
             tools=outils,
-            messages=messages,
+            messages=_dernier_bloc_en_cache(messages),
         )
 
         # Afficher le texte éventuel de ce tour

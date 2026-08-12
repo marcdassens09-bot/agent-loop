@@ -58,6 +58,21 @@ def filtrer_donnees_sensibles(texte):
     return texte
 
 
+def _dernier_bloc_en_cache(messages):
+    """Pose un marqueur de cache sur le dernier bloc du dernier message.
+    Gratuit si la conversation est encore courte (le minimum cache sur
+    Sonnet 5 est d'environ 1024 tokens) ; sur un echange qui s'allonge, evite
+    de repayer plein tarif tout l'historique deja envoye a chaque tour."""
+    dernier = messages[-1]
+    contenu = dernier["content"]
+    if isinstance(contenu, str):
+        blocs = [{"type": "text", "text": contenu, "cache_control": {"type": "ephemeral"}}]
+    else:
+        blocs = list(contenu)
+        blocs[-1] = {**blocs[-1], "cache_control": {"type": "ephemeral"}}
+    return messages[:-1] + [{**dernier, "content": blocs}]
+
+
 @app.route("/health")
 def health():
     return jsonify({
@@ -106,13 +121,13 @@ def chat():
                 thinking=THINKING,
                 system=PROMPT_SYSTEME,
                 tools=OUTILS,
-                messages=messages_api,
+                messages=_dernier_bloc_en_cache(messages_api),
             ) if OUTILS else client.messages.create(
                 model=MODELE,
                 max_tokens=700,
                 thinking=THINKING,
                 system=PROMPT_SYSTEME,
-                messages=messages_api,
+                messages=_dernier_bloc_en_cache(messages_api),
             )
             for bloc in reponse.content:
                 if bloc.type == "text" and bloc.text.strip():
