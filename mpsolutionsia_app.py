@@ -5,10 +5,13 @@ Route POST /chat avec système de métiers multiples.
 
 import os
 import re
+import secrets
 import logging
 import traceback
 import sys
 from flask import Flask, request, jsonify
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from dotenv import load_dotenv
 from anthropic import Anthropic, APIConnectionError, APITimeoutError
 import httpx
@@ -53,6 +56,9 @@ def _dernier_bloc_en_cache(messages):
 
 # Application Flask
 app = Flask(__name__)
+
+# SÉCURITÉ : anti-spam (cohérent avec assistant-mpsolutions et le camping)
+limiter = Limiter(get_remote_address, app=app, default_limits=["20 per minute"])
 
 # Client Anthropic avec timeouts pour Render
 api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
@@ -107,6 +113,7 @@ def metiers():
 
 
 @app.route("/chat", methods=["POST"])
+@limiter.limit("10 per minute")  # SÉCURITÉ : max 10 messages/minute par visiteur
 def chat():
     """
     Route principale pour le chat.
@@ -146,7 +153,15 @@ def chat():
 
         message = data["message"]
         metier = data["metier"]
-        session_id = data.get("session_id", f"default_{metier}")
+
+        # SÉCURITÉ : messages trop longs bloqués (cohérent avec les autres bots)
+        if not isinstance(message, str) or len(message) > 500:
+            return jsonify({"error": "Message trop long, merci de reformuler plus brièvement."}), 400
+
+        # SÉCURITÉ : un session_id absent ne doit jamais retomber sur une valeur
+        # prévisible (ex. "default_plombier"), sinon deux visiteurs du même
+        # métier sans session_id explicite partageraient le même historique.
+        session_id = data.get("session_id") or f"{metier}_{secrets.token_hex(8)}"
 
         logger.info(f"Session: {session_id}, Métier: {metier}, Message: {filtrer_donnees_sensibles(message)[:50]}...")
 
@@ -224,9 +239,10 @@ def chat():
     except Exception as e:
         logger.error(f"ERREUR dans /chat: {str(e)}")
         logger.error(f"Traceback complet:\n{traceback.format_exc()}")
+        # SÉCURITÉ : le traceback reste dans les logs serveur, jamais dans la
+        # réponse HTTP (il révèle chemins de fichiers et structure interne).
         return jsonify({
-            "error": str(e),
-            "traceback": traceback.format_exc()
+            "error": "Erreur interne, merci de réessayer."
         }), 500
 
 
@@ -268,7 +284,9 @@ def diagnose():
         api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
 
         if api_key:
-            diagnostics["api_key_format"] = f"{api_key[:20]}...{api_key[-10:]}"
+            # SÉCURITÉ : endpoint public sans authentification, on limite au
+            # strict minimum ce qui est exposé de la clé (avant : 30 caractères).
+            diagnostics["api_key_format"] = f"{api_key[:6]}..."
 
         # Test 1: DNS resolution
         logger.info("Test 1: Résolution DNS...")
@@ -317,10 +335,8 @@ def diagnose():
 
     except Exception as e:
         logger.error(f"Erreur dans /diagnose: {str(e)}")
-        return jsonify({
-            "error": str(e),
-            "traceback": traceback.format_exc()
-        }), 500
+        logger.error(f"Traceback complet:\n{traceback.format_exc()}")
+        return jsonify({"error": "Erreur interne, merci de réessayer."}), 500
 
 
 @app.errorhandler(404)
