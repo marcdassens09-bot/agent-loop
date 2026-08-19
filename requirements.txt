@@ -8,4 +8,5 @@ reportlab==4.2.5
 google-api-python-client==2.147.0
 google-auth==2.35.0
 google-auth-oauthlib==1.2.1
+mcp==1.29.0
 

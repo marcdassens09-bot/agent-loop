@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "surveillance-mp-solutions": {
+      "command": "python",
+      "args": ["mcp_serveur_surveillance.py"],
+      "cwd": "."
+    }
+  }
+}
