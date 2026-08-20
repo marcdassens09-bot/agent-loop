@@ -5,7 +5,11 @@ Usage : from clients_agent import ClientsAgent
 """
 
 import json
+import re
 from datetime import datetime, timedelta
+
+# Nombre de jours sans réponse au-delà duquel une relance est proposée.
+SEUIL_RELANCE_JOURS = 5
 
 # ── Base clients MP Solutions IA ───────────────────────────────────────────────
 CLIENTS = {
@@ -243,6 +247,67 @@ class ClientsAgent:
                     "priorite": "haute",
                 })
         return actions
+
+    def relances_prioritaires(self, seuil_jours: int = SEUIL_RELANCE_JOURS) -> list:
+        """
+        Calcule automatiquement qui relancer, à partir des dates déjà écrites
+        dans prochaine_action/notes (ex. "envoyé le 17/08/2026") — au lieu de
+        se fier au texte statique de actions_a_faire(). Un prospect "en
+        attente de réponse" depuis plus de seuil_jours devient une relance
+        prioritaire ; en dessous du seuil, il reste "en attente, pas encore
+        urgent".
+        """
+        aujourdhui = datetime.now().date()
+        resultats = []
+
+        for cle, p in self.prospects.items():
+            if p["statut"] == "écarté":
+                continue
+
+            texte = f"{p['prochaine_action']} {p['notes']}"
+            dates_trouvees = re.findall(r"(\d{2})/(\d{2})/(\d{4})", texte)
+            derniere_date = None
+            if dates_trouvees:
+                jj, mm, aaaa = dates_trouvees[-1]
+                try:
+                    derniere_date = datetime(int(aaaa), int(mm), int(jj)).date()
+                except ValueError:
+                    derniere_date = None
+
+            en_attente = "attente" in p["prochaine_action"].lower()
+            jours_ecoules = (aujourdhui - derniere_date).days if derniere_date else None
+
+            if en_attente and jours_ecoules is not None and jours_ecoules >= seuil_jours:
+                statut_relance = "À relancer"
+                urgence = "haute"
+            elif en_attente:
+                statut_relance = "En attente, pas encore urgent"
+                urgence = "basse"
+            elif "relancer" in p["prochaine_action"].lower():
+                statut_relance = "À relancer"
+                urgence = "haute"
+            elif p["prochaine_action"]:
+                statut_relance = "Action différente à faire"
+                urgence = "normale"
+            else:
+                statut_relance = "Rien en attente"
+                urgence = "basse"
+
+            resultats.append({
+                "entreprise": p["entreprise"],
+                "cle": cle,
+                "statut_relance": statut_relance,
+                "urgence": urgence,
+                "jours_depuis_dernier_contact": jours_ecoules,
+                "prochaine_action_actuelle": p["prochaine_action"],
+            })
+
+        ordre_urgence = {"haute": 0, "normale": 1, "basse": 2}
+        resultats.sort(key=lambda r: (
+            ordre_urgence[r["urgence"]],
+            -(r["jours_depuis_dernier_contact"] or 0),
+        ))
+        return resultats
 
     def mettre_a_jour(self, cle: str, prochaine_action: str, notes: str = "") -> str:
         """Met à jour l'action suivante pour un client ou prospect."""

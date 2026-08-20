@@ -46,6 +46,14 @@ def tableau_de_bord_clients() -> str:
     }, ensure_ascii=False)
 
 
+def relances_du_jour() -> str:
+    """Pour chaque prospect, statut de relance calculé automatiquement à
+    partir des dates déjà notées (pas une priorité écrite à la main) :
+    À relancer / En attente pas encore urgent / Action différente / Rien en
+    attente, avec le nombre de jours depuis le dernier contact connu."""
+    return json.dumps(_agent_clients.relances_prioritaires(), ensure_ascii=False)
+
+
 def verifier_tout_le_parc() -> str:
     """Teste les 7 services Render d'un coup (peut prendre plusieurs minutes
     si des instances gratuites dorment)."""
@@ -74,11 +82,22 @@ OUTILS = [
                        "complet, pas pour une question ciblée sur les clients.",
         "input_schema": {"type": "object", "properties": {}},
     },
+    {
+        "name": "relances_du_jour",
+        "description": "Statut de relance calculé automatiquement pour "
+                       "chaque prospect (À relancer / en attente pas encore "
+                       "urgent / etc.), avec le nombre de jours depuis le "
+                       "dernier contact. À utiliser pour prioriser la partie "
+                       "'prospects' du bilan au lieu de deviner depuis "
+                       "actions_a_faire.",
+        "input_schema": {"type": "object", "properties": {}},
+    },
 ]
 
 IMPLEMENTATIONS = {
     "tableau_de_bord_clients": tableau_de_bord_clients,
     "verifier_tout_le_parc": verifier_tout_le_parc,
+    "relances_du_jour": relances_du_jour,
 }
 
 SYSTEM_PROMPT = (
@@ -88,7 +107,10 @@ SYSTEM_PROMPT = (
     "synthèse courte et actionnable, comme un point du lundi matin. "
     "Structure toujours la réponse en 3 parties : "
     "1) Revenu et clients actifs (le chiffre d'abord). "
-    "2) Prospects — classe les actions par priorité, la plus urgente en tête. "
+    "2) Prospects — utilise toujours relances_du_jour (pas actions_a_faire) "
+    "pour cette partie : mets en avant les prospects 'À relancer' avec leur "
+    "nombre de jours d'attente, puis résume rapidement le reste sans détailler "
+    "chaque prospect 'en attente pas encore urgent' un par un. "
     "3) Parc technique — ne signale que ce qui ne fonctionne pas ; si tout va "
     "bien, dis-le en une ligne, ne détaille pas les 7 services un par un. "
     "N'invente aucune donnée absente des outils (pas de chiffre de "
