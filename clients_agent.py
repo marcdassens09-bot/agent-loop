@@ -265,9 +265,11 @@ PROSPECTS = {
         "entreprise": "Move Fitness",
         "statut": "prospect",
         "secteur": "Salle de fitness, SIRET 821902434 00017",
-        "prochaine_action": "Monter le dossier découverte (pas encore commencé)",
+        "prochaine_action": "Dossier découverte prêt (sans tarif), premier contact à faire",
         "notes": "Saverdun — active depuis 2016, repérée sans site propre (Facebook et annuaires "
-                 "uniquement), pas encore de premier contact",
+                 "uniquement). Dossier découverte généré le 22/08/2026 "
+                 "(dossier_move_fitness.py sur mp-solutions-ia) — pas de tarif proposé avant "
+                 "premier échange. Pas encore envoyé.",
     },
     "eterlou_sport": {
         "nom": "Responsable",
@@ -275,9 +277,11 @@ PROSPECTS = {
         "statut": "prospect",
         "secteur": "Magasin d'articles de sport (ski, montagne), SARL, 3-5 salariés, "
                    "SIRET 334501400 00017",
-        "prochaine_action": "Monter le dossier découverte (pas encore commencé)",
+        "prochaine_action": "Dossier découverte prêt (sans tarif), premier contact à faire",
         "notes": "Ax-les-Thermes / Luzenac — 40 ans d'activité (créée en 1985), repérée sans site "
-                 "propre, pas encore de premier contact",
+                 "propre. Dossier découverte généré le 22/08/2026 "
+                 "(dossier_eterlou_sport.py sur mp-solutions-ia) — pas de tarif proposé avant "
+                 "premier échange. Pas encore envoyé.",
     },
 }
 
