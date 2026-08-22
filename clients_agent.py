@@ -258,6 +258,27 @@ PROSPECTS = {
                  "(dossier_snlc_appameteck.py sur mp-solutions-ia) — pas de tarif proposé avant "
                  "premier échange. Pas encore envoyé.",
     },
+
+    # ── Sport (Ariège) ───────────────────────────────────────────────────
+    "move_fitness": {
+        "nom": "Gualter Da Silva Machado",
+        "entreprise": "Move Fitness",
+        "statut": "prospect",
+        "secteur": "Salle de fitness, SIRET 821902434 00017",
+        "prochaine_action": "Monter le dossier découverte (pas encore commencé)",
+        "notes": "Saverdun — active depuis 2016, repérée sans site propre (Facebook et annuaires "
+                 "uniquement), pas encore de premier contact",
+    },
+    "eterlou_sport": {
+        "nom": "Responsable",
+        "entreprise": "L'Éterlou Sport",
+        "statut": "prospect",
+        "secteur": "Magasin d'articles de sport (ski, montagne), SARL, 3-5 salariés, "
+                   "SIRET 334501400 00017",
+        "prochaine_action": "Monter le dossier découverte (pas encore commencé)",
+        "notes": "Ax-les-Thermes / Luzenac — 40 ans d'activité (créée en 1985), repérée sans site "
+                 "propre, pas encore de premier contact",
+    },
 }
 
 
