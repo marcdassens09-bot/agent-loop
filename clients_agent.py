@@ -36,6 +36,16 @@ CLIENTS = {
 }
 
 PROSPECTS = {
+    # ── Artigat ──────────────────────────────────────────────────────────
+    "batisse_deco": {
+        "nom": "Responsable",
+        "entreprise": "Batisse et Deco",
+        "statut": "prospect",
+        "secteur": "Terrassement/VRD, SIRET 808 559 736 00018",
+        "prochaine_action": "Dossier livré, en attente de réponse (date d'envoi à confirmer)",
+        "notes": "Artigat — campagne BTP Artigat, méthode vérif SIRET/pas de réseau national/sans site du 17/08. Dossier PDF généré et validé.",
+    },
+
     # ── Le Fossat ────────────────────────────────────────────────────────
     "fumeco": {
         "nom": "Thomas Fournial",
@@ -76,6 +86,22 @@ PROSPECTS = {
         "secteur": "Bar-restaurant",
         "prochaine_action": "Déposer le dossier à jour sur Drive (glisser-déposer manuel)",
         "notes": "Le Fossat — connaissance personnelle de marc-paul, dossier mis à jour le 11/08/2026",
+    },
+    "dupuy_services": {
+        "nom": "Responsable",
+        "entreprise": "Menuiseries Dupuy Services",
+        "statut": "prospect",
+        "secteur": "Menuiserie, SIRET 823 554 886 00015",
+        "prochaine_action": "Dossier livré, en attente de réponse (date d'envoi à confirmer)",
+        "notes": "Le Fossat — campagne BTP Artigat, méthode vérif SIRET/pas de réseau national/sans site du 17/08. Dossier PDF généré et validé.",
+    },
+    "pons_plaquiste": {
+        "nom": "Responsable",
+        "entreprise": "Pons Plaquiste Peintre",
+        "statut": "prospect",
+        "secteur": "Plaquiste-peintre, SAS, 3-5 salariés RGE Qualibat, SIRET 823 725 601 00012",
+        "prochaine_action": "En attente de réponse (envoyé le 22/08/2026)",
+        "notes": "Le Fossat — campagne BTP Artigat. Dossier resserré sur 1 page (docs_template/dossier_pons.py sur mp-solutions-ia), validé et livré le 22/08/2026.",
     },
     "ajmp": {
         "nom": "Responsable",
@@ -192,6 +218,32 @@ PROSPECTS = {
         "secteur": "Électricien",
         "prochaine_action": "En attente de réponse (envoyé le 17/08/2026)",
         "notes": "Sabarat — dossier livré le 17/08/2026, ancien site tombé",
+    },
+
+    # ── Vétérinaires (Ariège/Haute-Garonne) ─────────────────────────────
+    "veto_damin": {
+        "nom": "Dr Julie Damin",
+        "entreprise": "",
+        "statut": "prospect",
+        "secteur": "Vétérinaire",
+        "prochaine_action": "Monter le dossier (pas encore commencé)",
+        "notes": "Lézat-sur-Lèze — repérée sans site, pas encore de premier contact",
+    },
+    "veto_trichet": {
+        "nom": "Dr Trichet",
+        "entreprise": "",
+        "statut": "prospect",
+        "secteur": "Vétérinaire",
+        "prochaine_action": "Monter le dossier (pas encore commencé)",
+        "notes": "Saverdun — repéré sans site, pas encore de premier contact",
+    },
+    "veto_castaing": {
+        "nom": "Castaing",
+        "entreprise": "",
+        "statut": "prospect",
+        "secteur": "Vétérinaire",
+        "prochaine_action": "Monter le dossier (pas encore commencé)",
+        "notes": "Saverdun — repéré sans site, pas encore de premier contact",
     },
 }
 
