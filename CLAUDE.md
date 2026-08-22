@@ -190,6 +190,44 @@ dossiers par prospect qui l'importent) et `index.html` (site vitrine, voir aussi
 dernière page d'un dossier PDF, resserrer (styles locaux au fichier du dossier, pas
 `mp_template.py`) plutôt que déborder sur une page quasi vide.
 
+## Prospection par secteur — méthode et résultats (session du 22/08/2026)
+
+En plus de la campagne BTP Artigat, prospection étendue à d'autres secteurs en Ariège, toujours
+avec la même méthode (recherche web + vérification SIRET + exclusion des enseignes nationales
+et des sites déjà en place). Résultats ajoutés à `clients_agent.py` (28 prospects au total) :
+
+- **Location de matériel** : 1 trouvé sur ~15 candidats explorés — SNLC Appameteck (Cyril
+  Charbonnier, Pamiers, sono/éclairage événementiel). Le secteur est globalement déjà bien
+  couvert par des structures avec site (AMB, Stockbat, Proloc, Mél'ocation...) — rendement
+  faible, ne pas y retourner sans nouvelle piste.
+- **Sport** : 2 trouvés — Move Fitness (Saverdun, salle de fitness) et L'Éterlou Sport
+  (Ax-les-Thermes/Luzenac, magasin d'articles de sport). Écartés : tous les coachs/guides
+  outdoor identifiés (Nadège Paci, Ariège Canyon Aventure, etc.) ont déjà un site ; les coachs
+  sportifs listés sur des plateformes marketplace (OwnSport) sont impossibles à identifier
+  pleinement (nom complet masqué, page bloquée) — ne pas les ajouter sans SIRET vérifié.
+- **Santé/bien-être : abandonné le 22/08.** Un seul candidat potentiel trouvé (Marie Esthétique,
+  Le Fossat, institut de beauté depuis 2005) mais **SIRET introuvable** malgré une dizaine de
+  recherches — piste laissée de côté plutôt que d'inventer un numéro. Piège évité au passage :
+  ne pas confondre avec « BEAUTY MARIE », société homonyme sans rapport basée à Orchies (59).
+
+**Limite technique de cet environnement (sessions cloud) :** PagesJaunes, Pappers,
+annuaire-entreprises.data.gouv.fr, societe.com et ownsport.fr sont **bloqués par le proxy
+d'egress réseau** — seul `WebSearch` (résultats indexés) fonctionne, pas `WebFetch` direct sur
+ces domaines. Ça limite la vérification SIRET aux extraits que WebSearch remonte ; si rien ne
+sort, ne pas inventer le numéro — dire que c'est introuvable, comme pour Marie Esthétique.
+
+**Nouveau type de dossier : « découverte, sans tarif ».** Pour un prospect qui n'a pas encore eu
+de premier contact, ne jamais afficher de tarif dans le dossier PDF (contrairement aux dossiers
+« envoyés » du 17/08 qui avaient un tableau tarif) — la structure Docteur Commercial se termine
+par une section « Prochaine étape » invitant à un échange, pas par un prix imposé. Exemples :
+`dossier_snlc_appameteck.py`, `dossier_move_fitness.py`, `dossier_eterlou_sport.py` sur
+`mp-solutions-ia`. Le tarif n'apparaît que dans un dossier commercial complet, après un premier
+échange.
+
+**Process de validation établi cette session :** toujours montrer le diff (`git diff`/`git show`)
+avant `git push`, même après un `git commit` déjà fait — ne pas pousser à l'aveugle sur la
+confirmation d'un commit seul.
+
 ## Conventions
 
 - Clé API dans `.env` (non versionné), jamais en dur.
