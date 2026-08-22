@@ -252,9 +252,11 @@ PROSPECTS = {
         "entreprise": "SNLC Appameteck",
         "statut": "prospect",
         "secteur": "Location sono/éclairage événementiel, auto-entrepreneur, SIRET 512199415 00039",
-        "prochaine_action": "Monter le dossier (pas encore commencé)",
+        "prochaine_action": "Dossier découverte prêt (sans tarif), premier contact à faire",
         "notes": "Pamiers — actif depuis 2009, repéré sans site fonctionnel (deux sites abandonnés "
-                 "trouvés, e-monsite et Wix), pas encore de premier contact",
+                 "trouvés, e-monsite et Wix). Dossier découverte généré le 22/08/2026 "
+                 "(dossier_snlc_appameteck.py sur mp-solutions-ia) — pas de tarif proposé avant "
+                 "premier échange. Pas encore envoyé.",
     },
 }
 
