@@ -136,6 +136,60 @@ Ses endpoints ont été **supposés, pas documentés**. Vérifié : `api.secureh
 mais les chemins codés renvoient 404. Ctoutvert fournit sa documentation sur demande
 (voir `EMAIL_CTOUTVERT.md`). Ne pas s'en servir tel quel.
 
+## La mémoire Drive (memory_agent.py, clients_context_agent.py) est morte (constaté le 22/08/2026)
+
+`memory_agent.py` et `clients_context_agent.py` (chargés par `loader.py`) sauvegardent sur des
+fichiers Google Drive dédiés (`DRIVE_IDS` dans `loader.py`). Vérifié le 22/08/2026 : les deux
+fichiers Drive contiennent encore les données de test du tout premier lancement, datées du
+**29/07/2026** — jamais mis à jour depuis en usage réel. Ne pas s'y fier pour retrouver le
+contexte d'une session passée. Les sources fiables sont **ce fichier CLAUDE.md** et l'historique
+git — et, pour tout ce qui touche à la prospection commerciale réelle (dossiers envoyés,
+financement), **les emails envoyés du compte Gmail** (voir ci-dessous), pas Drive.
+
+## `clients_agent.py` est la seule liste de prospects à jour (22/08/2026)
+
+Il existe **trois** listes de prospects différentes dans l'écosystème MP Solutions IA :
+`clients_agent.py` (ce dépôt, 25 entrées), `clients_context_agent.py`/Drive (4 entrées, mortes
+depuis le 29/07), et `prospect_agent.py` (4 entrées, ancien module de génération de documents,
+non branché sur la liste actuelle). **Seul `clients_agent.py` est à jour** — s'y référer, pas
+aux deux autres.
+
+**Piège vérifié le 22/08/2026 : aucun dossier prospect n'a réellement été envoyé.** Le fichier
+contenait des `prochaine_action` du type « envoyé le 17/08/2026 » ou « livré le 17/08/2026 » sur
+une douzaine de prospects — c'était faux. Marc-Paul **n'a pas de véhicule** pour aller démarcher
+les prospects (artisans BTP, Lézat-sur-Lèze, etc.) en zone rurale ; les dossiers PDF existent et
+sont validés, mais rien n'est physiquement parti. Corrigé : `prochaine_action` dit maintenant
+« Dossier prêt, pas encore livré (pas de véhicule pour aller démarcher sur place) ». Ne jamais
+remarquer un dossier comme « envoyé »/« livré » sans confirmation explicite que l'envoi a eu
+lieu (email réellement parti, ou dépôt physique confirmé) — vérifier si besoin dans les emails
+envoyés Gmail plutôt que de prendre le texte existant du fichier pour argent comptant.
+
+## Le dossier de financement « Initiative Ariège » vit dans les emails envoyés, pas sur Drive
+
+Marc-Paul a demandé un prêt d'honneur à Initiative Ariège (`contact@initiativeariege.org`).
+Le dossier Drive (`MP_Solutions_IA_Initiative_Ariege*.pdf`, 3 versions PDF de juillet 2026,
+8500€/9500€) est **obsolète** : la vraie version de référence a été envoyée par email le
+**20/08/2026**, en pièce jointe `.docx` (`dossier_ariege_initiative_mp_solutions_ia_maj_20-08.docx`),
+montant **11 025 €**, avec SIRET définitif (108 354 739 00014) et ACRE acceptée. Pour retrouver
+la version à jour d'un dossier envoyé à un tiers, chercher dans `in:sent` sur Gmail plutôt que
+sur Drive. Le budget de ce dossier finance justement un véhicule d'occasion (8 000 €) pour la
+prospection rurale — donc directement lié au blocage « pas de véhicule » ci-dessus : tant que ce
+prêt n'est pas obtenu, les dossiers prospects BTP ne peuvent pas être livrés sur place.
+
+Une version mise à jour (22/08/2026, avec les 6 nouveaux prospects — campagne BTP Artigat +
+secteur vétérinaire) a été préparée et envoyée à marc-paul pour relecture, **pas encore
+renvoyée** à Initiative Ariège — vérifier avec lui avant tout envoi.
+
+## Le dépôt `mp-solutions-ia` (attaché le 22/08/2026)
+
+Contient `docs_template/` (`mp_template.py` = socle ReportLab commun, jamais à modifier
+directement — voir le skill `mp-pdf-template` ; `dossier_fumeco.py`, `dossier_pons.py` =
+dossiers par prospect qui l'importent) et `index.html` (site vitrine, voir aussi
+`site-mpsolutions` plus haut — vérifier qu'il ne s'agit pas du même contenu en double).
+`feedback_pdf_equilibrer_pages.md` documente la règle : jamais de grand blanc en bas de la
+dernière page d'un dossier PDF, resserrer (styles locaux au fichier du dossier, pas
+`mp_template.py`) plutôt que déborder sur une page quasi vide.
+
 ## Conventions
 
 - Clé API dans `.env` (non versionné), jamais en dur.
