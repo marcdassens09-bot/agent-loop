@@ -245,6 +245,17 @@ PROSPECTS = {
         "prochaine_action": "Monter le dossier (pas encore commencé)",
         "notes": "Saverdun — repéré sans site, pas encore de premier contact",
     },
+
+    # ── Location de matériel (Ariège) ───────────────────────────────────
+    "snlc_appameteck": {
+        "nom": "Cyril Charbonnier",
+        "entreprise": "SNLC Appameteck",
+        "statut": "prospect",
+        "secteur": "Location sono/éclairage événementiel, auto-entrepreneur, SIRET 512199415 00039",
+        "prochaine_action": "Monter le dossier (pas encore commencé)",
+        "notes": "Pamiers — actif depuis 2009, repéré sans site fonctionnel (deux sites abandonnés "
+                 "trouvés, e-monsite et Wix), pas encore de premier contact",
+    },
 }
 
 
