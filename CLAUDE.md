@@ -136,6 +136,98 @@ Ses endpoints ont été **supposés, pas documentés**. Vérifié : `api.secureh
 mais les chemins codés renvoient 404. Ctoutvert fournit sa documentation sur demande
 (voir `EMAIL_CTOUTVERT.md`). Ne pas s'en servir tel quel.
 
+## La mémoire Drive (memory_agent.py, clients_context_agent.py) est morte (constaté le 22/08/2026)
+
+`memory_agent.py` et `clients_context_agent.py` (chargés par `loader.py`) sauvegardent sur des
+fichiers Google Drive dédiés (`DRIVE_IDS` dans `loader.py`). Vérifié le 22/08/2026 : les deux
+fichiers Drive contiennent encore les données de test du tout premier lancement, datées du
+**29/07/2026** — jamais mis à jour depuis en usage réel. Ne pas s'y fier pour retrouver le
+contexte d'une session passée. Les sources fiables sont **ce fichier CLAUDE.md** et l'historique
+git — et, pour tout ce qui touche à la prospection commerciale réelle (dossiers envoyés,
+financement), **les emails envoyés du compte Gmail** (voir ci-dessous), pas Drive.
+
+## `clients_agent.py` est la seule liste de prospects à jour (22/08/2026)
+
+Il existe **trois** listes de prospects différentes dans l'écosystème MP Solutions IA :
+`clients_agent.py` (ce dépôt, 25 entrées), `clients_context_agent.py`/Drive (4 entrées, mortes
+depuis le 29/07), et `prospect_agent.py` (4 entrées, ancien module de génération de documents,
+non branché sur la liste actuelle). **Seul `clients_agent.py` est à jour** — s'y référer, pas
+aux deux autres.
+
+**Piège vérifié le 22/08/2026 : aucun dossier prospect n'a réellement été envoyé.** Le fichier
+contenait des `prochaine_action` du type « envoyé le 17/08/2026 » ou « livré le 17/08/2026 » sur
+une douzaine de prospects — c'était faux. Marc-Paul **n'a pas de véhicule** pour aller démarcher
+les prospects (artisans BTP, Lézat-sur-Lèze, etc.) en zone rurale ; les dossiers PDF existent et
+sont validés, mais rien n'est physiquement parti. Corrigé : `prochaine_action` dit maintenant
+« Dossier prêt, pas encore livré (pas de véhicule pour aller démarcher sur place) ». Ne jamais
+remarquer un dossier comme « envoyé »/« livré » sans confirmation explicite que l'envoi a eu
+lieu (email réellement parti, ou dépôt physique confirmé) — vérifier si besoin dans les emails
+envoyés Gmail plutôt que de prendre le texte existant du fichier pour argent comptant.
+
+## Le dossier de financement « Initiative Ariège » vit dans les emails envoyés, pas sur Drive
+
+Marc-Paul a demandé un prêt d'honneur à Initiative Ariège (`contact@initiativeariege.org`).
+Le dossier Drive (`MP_Solutions_IA_Initiative_Ariege*.pdf`, 3 versions PDF de juillet 2026,
+8500€/9500€) est **obsolète** : la vraie version de référence a été envoyée par email le
+**20/08/2026**, en pièce jointe `.docx` (`dossier_ariege_initiative_mp_solutions_ia_maj_20-08.docx`),
+montant **11 025 €**, avec SIRET définitif (108 354 739 00014) et ACRE acceptée. Pour retrouver
+la version à jour d'un dossier envoyé à un tiers, chercher dans `in:sent` sur Gmail plutôt que
+sur Drive. Le budget de ce dossier finance justement un véhicule d'occasion (8 000 €) pour la
+prospection rurale — donc directement lié au blocage « pas de véhicule » ci-dessus : tant que ce
+prêt n'est pas obtenu, les dossiers prospects BTP ne peuvent pas être livrés sur place.
+
+Une version mise à jour (22/08/2026, avec les 6 nouveaux prospects — campagne BTP Artigat +
+secteur vétérinaire) a été préparée et envoyée à marc-paul pour relecture, **pas encore
+renvoyée** à Initiative Ariège — vérifier avec lui avant tout envoi.
+
+## Le dépôt `mp-solutions-ia` (attaché le 22/08/2026)
+
+Contient `docs_template/` (`mp_template.py` = socle ReportLab commun, jamais à modifier
+directement — voir le skill `mp-pdf-template` ; `dossier_fumeco.py`, `dossier_pons.py` =
+dossiers par prospect qui l'importent) et `index.html` (site vitrine, voir aussi
+`site-mpsolutions` plus haut — vérifier qu'il ne s'agit pas du même contenu en double).
+`feedback_pdf_equilibrer_pages.md` documente la règle : jamais de grand blanc en bas de la
+dernière page d'un dossier PDF, resserrer (styles locaux au fichier du dossier, pas
+`mp_template.py`) plutôt que déborder sur une page quasi vide.
+
+## Prospection par secteur — méthode et résultats (session du 22/08/2026)
+
+En plus de la campagne BTP Artigat, prospection étendue à d'autres secteurs en Ariège, toujours
+avec la même méthode (recherche web + vérification SIRET + exclusion des enseignes nationales
+et des sites déjà en place). Résultats ajoutés à `clients_agent.py` (28 prospects au total) :
+
+- **Location de matériel** : 1 trouvé sur ~15 candidats explorés — SNLC Appameteck (Cyril
+  Charbonnier, Pamiers, sono/éclairage événementiel). Le secteur est globalement déjà bien
+  couvert par des structures avec site (AMB, Stockbat, Proloc, Mél'ocation...) — rendement
+  faible, ne pas y retourner sans nouvelle piste.
+- **Sport** : 2 trouvés — Move Fitness (Saverdun, salle de fitness) et L'Éterlou Sport
+  (Ax-les-Thermes/Luzenac, magasin d'articles de sport). Écartés : tous les coachs/guides
+  outdoor identifiés (Nadège Paci, Ariège Canyon Aventure, etc.) ont déjà un site ; les coachs
+  sportifs listés sur des plateformes marketplace (OwnSport) sont impossibles à identifier
+  pleinement (nom complet masqué, page bloquée) — ne pas les ajouter sans SIRET vérifié.
+- **Santé/bien-être : abandonné le 22/08.** Un seul candidat potentiel trouvé (Marie Esthétique,
+  Le Fossat, institut de beauté depuis 2005) mais **SIRET introuvable** malgré une dizaine de
+  recherches — piste laissée de côté plutôt que d'inventer un numéro. Piège évité au passage :
+  ne pas confondre avec « BEAUTY MARIE », société homonyme sans rapport basée à Orchies (59).
+
+**Limite technique de cet environnement (sessions cloud) :** PagesJaunes, Pappers,
+annuaire-entreprises.data.gouv.fr, societe.com et ownsport.fr sont **bloqués par le proxy
+d'egress réseau** — seul `WebSearch` (résultats indexés) fonctionne, pas `WebFetch` direct sur
+ces domaines. Ça limite la vérification SIRET aux extraits que WebSearch remonte ; si rien ne
+sort, ne pas inventer le numéro — dire que c'est introuvable, comme pour Marie Esthétique.
+
+**Nouveau type de dossier : « découverte, sans tarif ».** Pour un prospect qui n'a pas encore eu
+de premier contact, ne jamais afficher de tarif dans le dossier PDF (contrairement aux dossiers
+« envoyés » du 17/08 qui avaient un tableau tarif) — la structure Docteur Commercial se termine
+par une section « Prochaine étape » invitant à un échange, pas par un prix imposé. Exemples :
+`dossier_snlc_appameteck.py`, `dossier_move_fitness.py`, `dossier_eterlou_sport.py` sur
+`mp-solutions-ia`. Le tarif n'apparaît que dans un dossier commercial complet, après un premier
+échange.
+
+**Process de validation établi cette session :** toujours montrer le diff (`git diff`/`git show`)
+avant `git push`, même après un `git commit` déjà fait — ne pas pousser à l'aveugle sur la
+confirmation d'un commit seul.
+
 ## Conventions
 
 - Clé API dans `.env` (non versionné), jamais en dur.
