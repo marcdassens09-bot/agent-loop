@@ -36,14 +36,24 @@ CLIENTS = {
 }
 
 PROSPECTS = {
+    # ── Artigat ──────────────────────────────────────────────────────────
+    "batisse_deco": {
+        "nom": "Responsable",
+        "entreprise": "Batisse et Deco",
+        "statut": "prospect",
+        "secteur": "Terrassement/VRD, SIRET 808 559 736 00018",
+        "prochaine_action": "Dossier prêt, pas encore livré (pas de véhicule pour aller démarcher sur place)",
+        "notes": "Artigat — campagne BTP Artigat, méthode vérif SIRET/pas de réseau national/sans site du 17/08. Dossier PDF généré et validé, jamais livré au prospect.",
+    },
+
     # ── Le Fossat ────────────────────────────────────────────────────────
     "fumeco": {
         "nom": "Thomas Fournial",
         "entreprise": "Fumeco-Lèze",
         "statut": "prospect",
         "secteur": "Fabricant substrats/compost, +15 salariés",
-        "prochaine_action": "En attente de réponse (envoyé le 17/08/2026)",
-        "notes": "Artigat — 1er contact envoyé le 17/08/2026 à contact@fumeco.fr",
+        "prochaine_action": "Dossier prêt, pas encore envoyé (pas de véhicule pour aller démarcher sur place)",
+        "notes": "Artigat — dossier prêt depuis le 17/08/2026, jamais réellement envoyé à contact@fumeco.fr",
     },
     "couleurs_asie": {
         "nom": "Responsable",
@@ -77,6 +87,22 @@ PROSPECTS = {
         "prochaine_action": "Déposer le dossier à jour sur Drive (glisser-déposer manuel)",
         "notes": "Le Fossat — connaissance personnelle de marc-paul, dossier mis à jour le 11/08/2026",
     },
+    "dupuy_services": {
+        "nom": "Responsable",
+        "entreprise": "Menuiseries Dupuy Services",
+        "statut": "prospect",
+        "secteur": "Menuiserie, SIRET 823 554 886 00015",
+        "prochaine_action": "Dossier prêt, pas encore livré (pas de véhicule pour aller démarcher sur place)",
+        "notes": "Le Fossat — campagne BTP Artigat, méthode vérif SIRET/pas de réseau national/sans site du 17/08. Dossier PDF généré et validé, jamais livré au prospect.",
+    },
+    "pons_plaquiste": {
+        "nom": "Responsable",
+        "entreprise": "Pons Plaquiste Peintre",
+        "statut": "prospect",
+        "secteur": "Plaquiste-peintre, SAS, 3-5 salariés RGE Qualibat, SIRET 823 725 601 00012",
+        "prochaine_action": "Dossier prêt, pas encore livré (pas de véhicule pour aller démarcher sur place)",
+        "notes": "Le Fossat — campagne BTP Artigat. Dossier resserré sur 1 page (docs_template/dossier_pons.py sur mp-solutions-ia), validé le 22/08/2026, jamais livré au prospect.",
+    },
     "ajmp": {
         "nom": "Responsable",
         "entreprise": "AJMP Plombier Chauffagiste",
@@ -108,48 +134,48 @@ PROSPECTS = {
         "entreprise": "Garage Garrigues Alain (AD Expert)",
         "statut": "prospect",
         "secteur": "Garage-carrosserie, PME",
-        "prochaine_action": "En attente de réponse (envoyé le 17/08/2026)",
-        "notes": "Lézat-sur-Lèze — dossier livré le 17/08/2026",
+        "prochaine_action": "Dossier prêt, pas encore livré (pas de véhicule pour aller démarcher sur place)",
+        "notes": "Lézat-sur-Lèze — dossier prêt depuis le 17/08/2026, jamais livré",
     },
     "cantine_prieure": {
         "nom": "Responsable",
         "entreprise": "La Cantine du Prieuré (SARL La Commanderie)",
         "statut": "prospect",
         "secteur": "Restaurant, PME",
-        "prochaine_action": "En attente de réponse (envoyé le 17/08/2026)",
-        "notes": "Lézat-sur-Lèze — dossier livré le 17/08/2026",
+        "prochaine_action": "Dossier prêt, pas encore livré (pas de véhicule pour aller démarcher sur place)",
+        "notes": "Lézat-sur-Lèze — dossier prêt depuis le 17/08/2026, jamais livré",
     },
     "cb_couverture": {
         "nom": "Christophe Burkler",
         "entreprise": "CB Couverture",
         "statut": "prospect",
         "secteur": "Couverture RGE, PME",
-        "prochaine_action": "Confirmer coordonnées directes puis relancer",
-        "notes": "Lézat-sur-Lèze — dossier livré le 17/08/2026",
+        "prochaine_action": "Confirmer coordonnées directes, puis dossier prêt mais pas encore livré (pas de véhicule)",
+        "notes": "Lézat-sur-Lèze — dossier prêt depuis le 17/08/2026, jamais livré",
     },
     "sans_et_fils": {
         "nom": "Thomas et Lucas Sans",
         "entreprise": "Sans et Fils",
         "statut": "prospect",
         "secteur": "Chauffage/clim/photovoltaïque, PME",
-        "prochaine_action": "En attente de réponse (envoyé le 17/08/2026)",
-        "notes": "Lézat-sur-Lèze — dossier livré le 17/08/2026, site jamais publié",
+        "prochaine_action": "Dossier prêt, pas encore livré (pas de véhicule pour aller démarcher sur place)",
+        "notes": "Lézat-sur-Lèze — dossier prêt depuis le 17/08/2026, jamais livré, site jamais publié",
     },
     "briques_et_galets": {
         "nom": "Responsable",
         "entreprise": "Briques et Galets",
         "statut": "prospect",
         "secteur": "Maçonnerie/couverture/isolation, PME",
-        "prochaine_action": "En attente de réponse (envoyé le 17/08/2026)",
-        "notes": "Lézat-sur-Lèze — dossier livré le 17/08/2026",
+        "prochaine_action": "Dossier prêt, pas encore livré (pas de véhicule pour aller démarcher sur place)",
+        "notes": "Lézat-sur-Lèze — dossier prêt depuis le 17/08/2026, jamais livré",
     },
     "jardinerie_franquine": {
         "nom": "Dominique Franquine",
         "entreprise": "Jardinerie Franquine",
         "statut": "prospect",
         "secteur": "Jardinerie/fleuriste, artisan solo",
-        "prochaine_action": "En attente de réponse (envoyé le 17/08/2026)",
-        "notes": "Lézat-sur-Lèze — demandé nommément par marc-paul, dossier livré le 17/08/2026",
+        "prochaine_action": "Dossier prêt, pas encore livré (pas de véhicule pour aller démarcher sur place)",
+        "notes": "Lézat-sur-Lèze — demandé nommément par marc-paul, dossier prêt depuis le 17/08/2026, jamais livré",
     },
     "domaine_lastronques": {
         "nom": "Laure Zeller",
@@ -174,24 +200,88 @@ PROSPECTS = {
         "entreprise": "Bordenave (plaquiste-jointeur RGE)",
         "statut": "prospect",
         "secteur": "Plaquiste, artisan solo",
-        "prochaine_action": "En attente de réponse (envoyé le 17/08/2026)",
-        "notes": "Le Fossat — dossier livré le 17/08/2026",
+        "prochaine_action": "Dossier prêt, pas encore livré (pas de véhicule pour aller démarcher sur place)",
+        "notes": "Le Fossat — dossier prêt depuis le 17/08/2026, jamais livré",
     },
     "claustre": {
         "nom": "Loïc Claustre",
         "entreprise": "Claustre (plombier-chauffagiste QualiPac)",
         "statut": "prospect",
         "secteur": "Plomberie/chauffage RGE, artisan solo/PME",
-        "prochaine_action": "En attente de réponse (envoyé le 17/08/2026)",
-        "notes": "Le Mas-d'Azil — dossier livré le 17/08/2026",
+        "prochaine_action": "Dossier prêt, pas encore livré (pas de véhicule pour aller démarcher sur place)",
+        "notes": "Le Mas-d'Azil — dossier prêt depuis le 17/08/2026, jamais livré",
     },
     "electron": {
         "nom": "Responsable",
         "entreprise": "Électron",
         "statut": "prospect",
         "secteur": "Électricien",
-        "prochaine_action": "En attente de réponse (envoyé le 17/08/2026)",
-        "notes": "Sabarat — dossier livré le 17/08/2026, ancien site tombé",
+        "prochaine_action": "Dossier prêt, pas encore livré (pas de véhicule pour aller démarcher sur place)",
+        "notes": "Sabarat — dossier prêt depuis le 17/08/2026, jamais livré, ancien site tombé",
+    },
+
+    # ── Vétérinaires (Ariège/Haute-Garonne) ─────────────────────────────
+    "veto_damin": {
+        "nom": "Dr Julie Damin",
+        "entreprise": "Dr Julie Damin (nom du cabinet inconnu)",
+        "statut": "prospect",
+        "secteur": "Vétérinaire",
+        "prochaine_action": "Monter le dossier (pas encore commencé)",
+        "notes": "Lézat-sur-Lèze — repérée sans site, pas encore de premier contact",
+    },
+    "veto_trichet": {
+        "nom": "Dr Trichet",
+        "entreprise": "Dr Trichet (nom du cabinet inconnu)",
+        "statut": "prospect",
+        "secteur": "Vétérinaire",
+        "prochaine_action": "Monter le dossier (pas encore commencé)",
+        "notes": "Saverdun — repéré sans site, pas encore de premier contact",
+    },
+    "veto_castaing": {
+        "nom": "Castaing",
+        "entreprise": "Castaing (nom du cabinet inconnu)",
+        "statut": "prospect",
+        "secteur": "Vétérinaire",
+        "prochaine_action": "Monter le dossier (pas encore commencé)",
+        "notes": "Saverdun — repéré sans site, pas encore de premier contact",
+    },
+
+    # ── Location de matériel (Ariège) ───────────────────────────────────
+    "snlc_appameteck": {
+        "nom": "Cyril Charbonnier",
+        "entreprise": "SNLC Appameteck",
+        "statut": "prospect",
+        "secteur": "Location sono/éclairage événementiel, auto-entrepreneur, SIRET 512199415 00039",
+        "prochaine_action": "Dossier découverte prêt (sans tarif), premier contact à faire",
+        "notes": "Pamiers — actif depuis 2009, repéré sans site fonctionnel (deux sites abandonnés "
+                 "trouvés, e-monsite et Wix). Dossier découverte généré le 22/08/2026 "
+                 "(dossier_snlc_appameteck.py sur mp-solutions-ia) — pas de tarif proposé avant "
+                 "premier échange. Pas encore envoyé.",
+    },
+
+    # ── Sport (Ariège) ───────────────────────────────────────────────────
+    "move_fitness": {
+        "nom": "Gualter Da Silva Machado",
+        "entreprise": "Move Fitness",
+        "statut": "prospect",
+        "secteur": "Salle de fitness, SIRET 821902434 00017",
+        "prochaine_action": "Dossier découverte prêt (sans tarif), premier contact à faire",
+        "notes": "Saverdun — active depuis 2016, repérée sans site propre (Facebook et annuaires "
+                 "uniquement). Dossier découverte généré le 22/08/2026 "
+                 "(dossier_move_fitness.py sur mp-solutions-ia) — pas de tarif proposé avant "
+                 "premier échange. Pas encore envoyé.",
+    },
+    "eterlou_sport": {
+        "nom": "Responsable",
+        "entreprise": "L'Éterlou Sport",
+        "statut": "prospect",
+        "secteur": "Magasin d'articles de sport (ski, montagne), SARL, 3-5 salariés, "
+                   "SIRET 334501400 00017",
+        "prochaine_action": "Dossier découverte prêt (sans tarif), premier contact à faire",
+        "notes": "Ax-les-Thermes / Luzenac — 40 ans d'activité (créée en 1985), repérée sans site "
+                 "propre. Dossier découverte généré le 22/08/2026 "
+                 "(dossier_eterlou_sport.py sur mp-solutions-ia) — pas de tarif proposé avant "
+                 "premier échange. Pas encore envoyé.",
     },
 }
 
