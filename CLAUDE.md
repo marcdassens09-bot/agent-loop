@@ -228,6 +228,45 @@ par une section « Prochaine étape » invitant à un échange, pas par un prix 
 avant `git push`, même après un `git commit` déjà fait — ne pas pousser à l'aveugle sur la
 confirmation d'un commit seul.
 
+## Repositionnement commercial « agent qui coordonne » (24-26/08/2026)
+
+Marc-Paul a poussé lui-même, en direct sur GitHub (commits `92cd586` et `82841b5`, auteur
+`marcdassens06@gmail.com` — pas une session Claude), un changement de discours sur
+`mp-solutions-ia` : on ne vend plus « un chatbot », mais un « agent qui coordonne » — il vérifie
+une info avant de répondre, transmet, signale l'urgent. Nouveau fichier maître :
+`docs_template/fiche_commerciale_generique.py` (2 pages, fusion de l'ancien prospectus
+philosophique et de la fiche capacités), plus `prospectus_mp_solutions_ia.pdf` et
+`build_prospectus.py`. Le nouveau paragraphe type "++ CE QUE JE PROPOSE" ("Je n'installe pas
+seulement un chatbot : j'intègre l'IA...") a été réappliqué aux 22 dossiers prospects existants.
+**Leçon : ce dépôt peut évoluer hors session Claude — toujours `git fetch origin main` avant de
+retoucher `mp-solutions-ia`, ne pas supposer que le dernier push connu est encore le HEAD.**
+
+**Ajout du 26/08 : la création de site web fait partie de l'offre**, pour les prospects qui n'en
+ont pas. Ajouté à trois endroits de `fiche_commerciale_generique.py` (puce page 1, ligne du
+tableau des bénéfices page 2, précision dans "Comment ça marche") — une seule mention ne suffisait
+pas, il a fallu que Marc-Paul la redemande deux fois de plus pour que ce soit visible. Appliqué
+aussi aux 7 dossiers prospects "sans site" existants (Batisse et Deco, CB Couverture, Claustre,
+Dupuy, Sans et Fils, Bois Ariégeois, Garrigues) **en plus de**, pas à la place de, leur offre
+existante de page de contact simple.
+
+**Piège rencontré : ajouter une phrase, même courte, à un dossier 2 pages déjà tassé au pixel
+près peut le faire déborder sur une 3e page quasi vide** (vécu sur Batisse et Deco et Garrigues :
+juste 1 ligne en trop faisait basculer tout le reste sur une page 3 à 60 % vide). Un seul essai
+de resserrage des espacements ne suffit pas forcément — il faut aussi raccourcir la phrase
+elle-même à une seule ligne (~85 caractères) si la page était déjà pleine jusqu'au bas. Toujours
+regénérer en PDF et vérifier visuellement (`pdftoppm`) après ce genre d'ajout, pas seulement
+compter les pages de tête.
+
+## Documents de prospection — où trouver quoi (26/08/2026)
+
+Sur `mp-solutions-ia`, chaque prospect de `clients_agent.py` a maintenant potentiellement 3
+niveaux de dossier PDF différents selon son avancement : dossier « découverte sans tarif »
+(prospects jamais contactés, ex. SNLC Appameteck/Move Fitness/L'Éterlou Sport — voir plus haut),
+dossier complet avec tableau tarif (prospects prêts à être livrés, ex. Fumeco/Pons), ou fiche
+générique sans nom de prospect (`fiche_commerciale_generique.py`, utilisable telle quelle en
+premier contact). Vérifier `git log --oneline` sur `mp-solutions-ia` en début de session pour
+voir si de nouveaux dossiers sont apparus depuis la dernière fois.
+
 ## Conventions
 
 - Clé API dans `.env` (non versionné), jamais en dur.
