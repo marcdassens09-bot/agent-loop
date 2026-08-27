@@ -70,6 +70,47 @@ PROSPECTS = {
         "ville": "Le Fossat",
         "tarif": "800€ + 60€/mois",
     },
+    # Nouveaux prospects TPE sans site internet propre — repérés le 27/08/2026 via
+    # recherche web (annuaires PagesJaunes/Arize-Lèze/AlloVoisins, aucun site dédié
+    # trouvé). Coordonnées non vérifiées par téléphone : à confirmer avant tout envoi.
+    "duchenne_plomberie": {
+        "nom": "Yves Duchenne",
+        "entreprise": "Duchenne Yves — Plomberie",
+        "secteur": "Plombier",
+        "ville": "Sainte-Croix-Volvestre",
+        "telephone": "09 77 69 85 49",
+        "tarif": "800€ + 60€/mois",
+    },
+    "pince_plomberie": {
+        "nom": "Ellen Pince",
+        "entreprise": "Pince Ellen — Plomberie/Chauffage",
+        "secteur": "Plombier-chauffagiste",
+        "ville": "Daumazan-sur-Arize",
+        "telephone": "06 03 22 52 27",
+        "tarif": "800€ + 60€/mois",
+    },
+    "garage_duffourg": {
+        "nom": "David Duffourg",
+        "entreprise": "Garage David Duffourg",
+        "secteur": "Garage automobile",
+        "ville": "Daumazan-sur-Arize",
+        "telephone": "05 61 69 86 56",
+        "tarif": "800€ + 60€/mois",
+    },
+    "faure_electricite": {
+        "nom": "Frédéric Fauré",
+        "entreprise": "Fauré Frédéric — Électricité générale",
+        "secteur": "Électricien",
+        "ville": "La Bastide-de-Besplas",
+        "tarif": "800€ + 60€/mois",
+    },
+    "coiffure_sabine": {
+        "nom": "Sabine Giordano",
+        "entreprise": "Coiffure Sabine",
+        "secteur": "Salon de coiffure",
+        "ville": "Daumazan-sur-Arize",
+        "tarif": "800€ + 60€/mois",
+    },
 }
 
 DOCUMENTS = [
