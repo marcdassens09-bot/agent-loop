@@ -136,6 +136,44 @@ Ses endpoints ont été **supposés, pas documentés**. Vérifié : `api.secureh
 mais les chemins codés renvoient 404. Ctoutvert fournit sa documentation sur demande
 (voir `EMAIL_CTOUTVERT.md`). Ne pas s'en servir tel quel.
 
+## Dossiers commerciaux prospects — mise en page (ajouté le 27/08/2026)
+
+Chaque prospect a un `dossier_<nom>.pdf` dans Drive (dossier « Dossiers Clients »),
+généré en ReportLab avec le logo MP Solutions IA et la charte (vert `#1b3a2b`,
+orange `#E8730A`, police DejaVu).
+
+**Mise en page standard (tous les prospects sauf La Trattoria — voir plus bas)** :
+sur le modèle de `dossier_molinari.pdf`. Page 1 : logo, titre, intro "Au
+commencement, l'homme savait" + tableau **GAGNÉ/PERDU coloré** (colonne gauche
+fond vert foncé texte blanc, colonne droite fond orange texte blanc), puis
+"La différence MP Solutions IA" (bullets), ">> CE QUE J'OBSERVE". Page 2 :
+"++ CE QUE JE PROPOSE" avec un **tableau de fonctionnalités en 2 colonnes**
+(colonne gauche fond vert foncé texte blanc = nom, colonne droite zébrée
+blanc/gris clair = description), "Sécurité et confidentialité", "Comment ça
+marche", "-> PARLONS-EN". Vérifié le 27/08 : tous les dossiers existants
+(Terreau Plus, Sans et Fils, Move Fitness, Eterlou Sport, Gayrard, etc.)
+utilisent déjà ce format — seuls `dossier_dupuy.pdf`, `dossier_claustre.pdf` et
+`dossier_cb_couverture.pdf` ont dû être corrigés pour l'adopter. Les 2 dossiers
+Couleurs d'Asie utilisent un gabarit à part (« majordome IA ») non concerné par
+cette règle.
+
+**Exception : `dossier_trattoria.pdf` (La Trattoria / Le Camion Doré) garde
+volontairement son ANCIENNE mise en page** — pas de tableaux du tout, "L'IA des
+grands groupes" et les fonctionnalités en paragraphes fondus (titre en gras +
+tiret + description). Décision explicite de Marc-Paul le 27/08 : **ne jamais
+appliquer les tableaux colorés à ce dossier**, même si on harmonise ou corrige
+les autres. Toute correction sur ce dossier doit rester dans ce style texte.
+
+**Règle de fond, valable pour tous les dossiers (tableaux ou pas)** : si le
+prospect n'a aucun site internet, l'annoncer en phrase affirmative — jamais sous
+forme de question. Écrire "Pas de site web aujourd'hui : j'en crée un, pensé
+pour accueillir l'agent." (et une ligne "Mise en place d'un site web" dans le
+tableau/la liste de fonctionnalités), jamais "Pas de site web ? J'en crée un."
+Piège vécu le 27/08 : trois dossiers diagnostiquaient "aucun site internet" en
+page 1 mais l'étape 3 de "Comment ça marche" disait quand même "Mise en ligne
+sur votre site" comme s'il existait déjà — les deux sections doivent rester
+cohérentes.
+
 ## Conventions
 
 - Clé API dans `.env` (non versionné), jamais en dur.
