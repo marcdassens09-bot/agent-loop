@@ -120,19 +120,32 @@ Le téléphone reste plus rapide que l'e-mail pour ce type de demande.
 À dire : « Je suis le prestataire technique du camping 5438, je cherche à
 savoir si une API est disponible et à quelles conditions. »
 
-## Quand les identifiants arriveront
+## Dénouement (26/08/2026) : pas d'API, ni même limitée
 
-Ils vont dans le fichier `.env` du dépôt `chatbot-camping-eychecadous`, jamais
-en dur dans le code et jamais collés dans une conversation. Voir
-[SECUREHOLIDAY_SETUP.md](./SECUREHOLIDAY_SETUP.md) pour la suite, et garder en
-tête que les endpoints actuels de `secureholiday_api.py` sont **supposés et
-faux** : tout sera à réécrire d'après la documentation reçue.
+Ctoutvert (Rachel, `commercial@ctoutvert.com`) a refusé tout accès API le
+18/08, puis confirmé le 24/08 qu'il n'existe pas non plus d'« API light »
+pour un client seul. `secureholiday_api.py` reste donc définitivement
+inutilisable tel quel — pas de clés à attendre dans `.env`.
+
+La solution retenue est la **construction d'URL** vers le moteur de
+réservation public, avec les paramètres transmis par Rachel le 24/08
+(`dateStart`/`dateEnd`, `travelers`, `productType`). Implémentée dans
+`chatbot-camping-eychecadous` (`lien_reservation()` dans `app.py`,
+[PR #1](https://github.com/marcdassens09-bot/chatbot-camping-eychecadous/pull/1),
+fusionnée le 27/08/2026).
+
+Point ouvert : le paramètre `/product/<id>` pour cibler un hébergement
+précis, annoncé par Rachel, renvoie une 404 en pratique (testé le
+27/08/2026 sur `/fr/5438/product/79658`). Relance envoyée le 27/08/2026
+dans le même fil, copie Anthony, demandant le format exact. En attendant,
+ce ciblage est désactivé côté code (pas de lien casse envoyé à un client).
 
 ## Suivi
 
 - [x] SIRET renseigné dans le message (version 2)
 - [x] Nom de famille d'Anthony renseigné (version 1)
 - [x] Version 1 envoyée par Anthony le 08/08/2026, `contact@mpsolutionsia.fr` en copie
-- [ ] Relance téléphonique au +33 5 61 47 23 53 si sans réponse sous une semaine (relancer à partir du 15/08/2026)
-- [ ] Documentation reçue
-- [ ] `secureholiday_api.py` réécrit d'après la documentation
+- [x] Documentation reçue (24/08/2026) : construction d'URL, pas d'API
+- [x] Lien de réservation enrichi (dates, participants, type d'hébergement) — fusionné 27/08/2026
+- [ ] Relance du 27/08/2026 sur le format `/product/<id>` (404 constaté) : en attente de réponse de Rachel
+- [ ] Une fois le bon format confirmé : réactiver le ciblage produit dans `lien_reservation()`
