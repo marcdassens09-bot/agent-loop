@@ -22,6 +22,23 @@ limiter = Limiter(get_remote_address, app=app, default_limits=["20 per minute"])
 client = Anthropic(api_key=(os.environ.get("ANTHROPIC_API_KEY") or "").strip())
 conversation_store = {}
 
+# Site(s) autorises a embarquer le bot en iframe (anti-clickjacking).
+# A l'installation : ajouter le domaine du client, ex.
+#   FRAME_ANCESTORS = "'self' https://exemple.fr https://www.exemple.fr"
+# Tant qu'il vaut "'self'", aucun site externe ne peut embarquer le bot.
+FRAME_ANCESTORS = "'self'"
+
+
+@app.after_request
+def _entetes_securite(response):
+    """En-tetes de securite HTTP sur toutes les reponses.
+    Pas de Permissions-Policy : le micro reste autorise (saisie vocale)."""
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Strict-Transport-Security"] = "max-age=63072000"
+    response.headers["Content-Security-Policy"] = f"frame-ancestors {FRAME_ANCESTORS}"
+    return response
+
 MODELE = "claude-sonnet-5"
 # Sur Sonnet 5, thinking est actif par defaut si on ne le precise pas : sur des
 # max_tokens serres (50, 700 ici) le raisonnement peut manger le budget avant

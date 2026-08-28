@@ -60,6 +60,21 @@ app = Flask(__name__)
 # SÉCURITÉ : anti-spam (cohérent avec assistant-mpsolutions et le camping)
 limiter = Limiter(get_remote_address, app=app, default_limits=["20 per minute"])
 
+
+@app.after_request
+def _entetes_securite(response):
+    """En-têtes de sécurité HTTP sur toutes les réponses.
+    frame-ancestors : seul mpsolutionsia.fr peut embarquer ce service en iframe
+    (protection anti-clickjacking sans casser un éventuel widget maison).
+    Pas de Permissions-Policy : le micro reste autorisé pour la saisie vocale."""
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Strict-Transport-Security"] = "max-age=63072000"
+    response.headers["Content-Security-Policy"] = (
+        "frame-ancestors 'self' https://mpsolutionsia.fr https://www.mpsolutionsia.fr"
+    )
+    return response
+
 # Client Anthropic avec timeouts pour Render
 api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
 logger.info(f"[STARTUP] ANTHROPIC_API_KEY présente: {bool(api_key)}")
@@ -181,10 +196,11 @@ def chat():
             conversation_store[session_id] = []
             logger.info(f"Nouvelle session créée: {session_id}")
 
-        # Ajouter le message de l'utilisateur
+        # Ajouter le message de l'utilisateur (données sensibles masquées avant
+        # stockage, comme le camping et la bulle du site)
         conversation_store[session_id].append({
             "role": "user",
-            "content": message
+            "content": filtrer_donnees_sensibles(message)
         })
 
         # Empeche l'historique de grossir indefiniment (cout + memoire serveur)
