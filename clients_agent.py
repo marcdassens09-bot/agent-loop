@@ -69,7 +69,7 @@ PROSPECTS = {
         "statut": "prospect",
         "secteur": "Boulangerie",
         "prochaine_action": "Compléter questionnaire + bon de commande avant relance",
-        "notes": "Le Fossat — dossier créé le 07/08/2026, rien envoyé depuis",
+        "notes": "Le Fossat — dossier créé le 07/08/2026, rien envoyé depuis. Pas de chatbot à elle : l'annuaire Restaurant Guru affiche son assistant \"Pierre\" sur sa fiche, hors de son contrôle et sans rapport avec sa boulangerie.",
     },
     "table_fossat": {
         "nom": "Responsable",
