@@ -58,10 +58,10 @@ PROSPECTS = {
     "couleurs_asie": {
         "nom": "Responsable",
         "entreprise": "Couleurs d'Asie",
-        "statut": "prospect",
+        "statut": "écarté",
         "secteur": "Restaurant cambodgien",
-        "prochaine_action": "Relancer pour signature",
-        "notes": "Le Fossat — dossier en cours depuis le 13/07, menus HTML déjà prêts, pas encore signé",
+        "prochaine_action": "",
+        "notes": "Le Fossat — ne veut pas de site internet, ne pas reproposer",
     },
     "boulangerie": {
         "nom": "Adrien De Oliveira",
