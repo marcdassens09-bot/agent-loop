@@ -51,8 +51,8 @@ CLIENTS_PAR_DEFAUT = {
             "secteur": "restaurant cambodgien",
             "lieu": "Le Fossat",
             "offre": "800€ setup + 60€/mois",
-            "statut": "prospect",
-            "notes": ""
+            "statut": "écarté",
+            "notes": "Ne veut pas de site internet, ne pas reproposer"
         },
         "boulangerie_de_oliveira": {
             "nom": "Adrien De Oliveira",
