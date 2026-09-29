@@ -267,6 +267,28 @@ générique sans nom de prospect (`fiche_commerciale_generique.py`, utilisable t
 premier contact). Vérifier `git log --oneline` sur `mp-solutions-ia` en début de session pour
 voir si de nouveaux dossiers sont apparus depuis la dernière fois.
 
+## Adresse de contact MP Solutions IA (29/09/2026)
+
+- **Adresse officielle : `contact@mpsolutionsia.fr`** — confirmée par marc-paul, elle reçoit
+  bien dans sa boîte. À utiliser partout : documents, prompts de bots, notifications.
+- `mpsolutionsia@gmail.com` **n'existe pas** (confirmé par marc-paul). Un test d'envoi depuis
+  sa boîte n'a renvoyé aucun rejet, ce qui ne prouve rien : ne jamais conclure « elle existe »
+  sur l'absence de rejet. Des visiteurs de la bulle du site ont pu écrire à cette adresse
+  jusqu'au 29/09 : ces messages sont perdus.
+- `marcdassens09@gmail.com` est son adresse personnelle : ne pas l'utiliser comme adresse
+  professionnelle ni comme destinataire des notifications de prospects
+  (marc-paul : « contact@mpsolutionsia.fr à la place de marcdassens09@gmail.com »).
+- Corrigé le 29/09 : signature des 22 dossiers de `mp-solutions-ia` (PDF régénérés), prompt
+  du bot vitrine (`assistant-mpsolutions/app.py`), pied de page du dashboard du camping.
+  Le camping garde sa propre adresse (`campingartigat@gmail.com`, voir plus haut).
+- **Reste à faire** : `demo-chatbot-ia/app.py` utilise `mpsolutionsia@gmail.com` comme
+  identifiant de connexion SMTP (`GMAIL_USER`) : l'envoi de notification ne peut pas
+  fonctionner tant qu'un vrai compte Gmail + mot de passe d'application ne sont pas
+  configurés. `contact@mpsolutionsia.fr` n'est pas un compte Gmail : il ne peut pas servir
+  de login SMTP, seulement de destinataire.
+- Après tout remplacement d'adresse : chercher l'ancienne dans les `.py`, `.html` **et les
+  PDF** (les PDF sont générés, la source seule ne suffit pas).
+
 ## Conventions
 
 - Clé API dans `.env` (non versionné), jamais en dur.
