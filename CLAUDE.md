@@ -289,6 +289,35 @@ voir si de nouveaux dossiers sont apparus depuis la dernière fois.
 - Après tout remplacement d'adresse : chercher l'ancienne dans les `.py`, `.html` **et les
   PDF** (les PDF sont générés, la source seule ne suffit pas).
 
+## Rotation de clé API — pièges vécus le 30/09/2026
+
+Rotation faite en une journée au lieu de 10 minutes. Ce qui a coûté du temps :
+
+- **`/health` ne prouve pas que la clé est valide.** `api_key_set: true` veut dire qu'une
+  clé est présente, pas qu'Anthropic l'accepte. Le vrai test est un appel réel :
+  `python verifier_services.py`. Symptôme d'une clé morte : `500` sur `/chat` côté client,
+  `401 API key is invalid` dans les logs Render.
+- **Noms de clés qui se ressemblent** (`Claude_code_local_2` / `claude_code_local_2`) : la
+  bonne clé a été supprimée par erreur, `mpsolutionsia` est tombé. Nommer chaque clé par
+  son usage (`mpsolutionsia-render-2026-09`) et faire une capture de la liste avant toute
+  suppression. Une clé supprimée ne se récupère pas, il faut en recréer une.
+- **Expiration par défaut : 30 jours** dans la console. Pour un bot en production, une clé
+  qui expire provoque une panne. Choisir « Jamais » (ou une date lointaine notée dans
+  l'agenda). Les clés « héritées » n'expirent pas.
+- **Le test local peut mentir.** `python agent_loop.py` a donné 151,10 € avec une autre clé
+  que celle du `.env` (variable système ou autre source). Tester le `.env` directement :
+  `python -c 'from dotenv import dotenv_values; import anthropic; k=dotenv_values(".env")["ANTHROPIC_API_KEY"]; print(len(k),k[:16],k[-4:]); anthropic.Anthropic(api_key=k).messages.create(model="claude-sonnet-5",max_tokens=10,messages=[{"role":"user","content":"ok"}],thinking={"type":"disabled"}); print("CLE .env OK")'`
+- **Render : la modification peut ne pas avoir pris.** Comparer les 16 premiers et les 4
+  derniers caractères de la variable avec le `.env`, et vérifier qu'un déploiement manuel
+  est bien passé à « Live » (`list_deploys`). « Save » seul ne redéploie pas.
+- **GitHub : un secret ne se relit jamais**, on ne peut que le remplacer. Utiliser
+  Settings → Secrets and variables → Actions → **Repository secrets** (pas
+  « Environment secrets », qui est une autre page). Vérifier ensuite avec « Re-run all jobs ».
+- **Ne jamais coller la clé entière dans un chat.** Donner seulement le début (16 caractères)
+  et la fin (4). Une clé collée est à considérer comme exposée.
+- Ordre sûr : nouvelle clé → `.env` → test direct → Render → `verifier_services.py` →
+  secret GitHub → CI vert → **seulement alors** supprimer l'ancienne.
+
 ## Conventions
 
 - Clé API dans `.env` (non versionné), jamais en dur.
