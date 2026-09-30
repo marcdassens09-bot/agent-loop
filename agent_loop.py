@@ -38,8 +38,10 @@ from anthropic import Anthropic
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
-# Charger le .env qui est À CÔTÉ de ce script, peu importe d'où on lance la commande
-load_dotenv(Path(__file__).parent / ".env")
+# Charger le .env qui est À CÔTÉ de ce script, peu importe d'où on lance la commande.
+# override=True : le .env prime sur une variable système ANTHROPIC_API_KEY oubliée
+# (le 30/09/2026, une ancienne clé système masquait la clé du .env après la rotation).
+load_dotenv(Path(__file__).parent / ".env", override=True)
 
 client = Anthropic(
     api_key=os.getenv("ANTHROPIC_API_KEY", "").strip(),
