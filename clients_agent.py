@@ -52,8 +52,8 @@ PROSPECTS = {
         "entreprise": "Fumeco-Lèze",
         "statut": "prospect",
         "secteur": "Fabricant substrats/compost, +15 salariés",
-        "prochaine_action": "Dossier prêt, pas encore envoyé (pas de véhicule pour aller démarcher sur place)",
-        "notes": "Artigat — dossier prêt depuis le 17/08/2026, jamais réellement envoyé à contact@fumeco.fr",
+        "prochaine_action": "Courrier de premier contact + fiche d'entrevue prêts (01/10/2026), à remettre en main propre — remise à confirmer",
+        "notes": "Artigat — mail envoyé le 17/08/2026 à contact@fumeco.fr (aucune réponse vue au 01/10) ; aucun dossier PDF remis à ce jour",
     },
     "couleurs_asie": {
         "nom": "Responsable",
