@@ -343,10 +343,10 @@ Rotation faite en une journée au lieu de 10 minutes. Ce qui a coûté du temps 
   et un abonnement à 800 € (erreur).
 - **Coordonnées sur les documents** : Marc-Paul Dassens, 06 44 00 22 52,
   `contact@mpsolutionsia.fr`, Artigat (09130).
-- **Les scripts générateurs n'ont pas été versionnés** (`premier_contact_fumeco.py`,
-  `fiche_entrevue_fumeco.py` étaient dans le scratchpad cloud, perdus en fin de session) ;
-  `mp-solutions-ia` n'était attaché qu'en lecture. À refaire sur le modèle de
-  `dossier_move_fitness.py` si besoin. Leçons de mise en page : le slogan est déjà dans le logo
+- **Les scripts générateurs sont versionnés** sur `mp-solutions-ia` (PR #2, fusionnée le
+  01/10/2026) : `docs_template/premier_contact_fumeco.py` et `fiche_entrevue_fumeco.py`, avec
+  leurs PDF. Polices DejaVu cherchées sous Linux, `C:/Windows/Fonts/` ou à côté du script ;
+  non testé sous Windows. Leçons de mise en page : le slogan est déjà dans le logo
   du header, ne pas le répéter dans le corps ; `build_document(..., show_page_number=False)`
   retire le « 1/1 » sans toucher `mp_template.py` ; pour remplir une page A4 sans blanc,
   corps 10 pt / interligne 17 / espaces de section 16-17 (dernière ligne vers y≈759 sur 771) ;
