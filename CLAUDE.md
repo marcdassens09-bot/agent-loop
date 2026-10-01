@@ -352,6 +352,32 @@ Rotation faite en une journée au lieu de 10 minutes. Ce qui a coûté du temps 
   corps 10 pt / interligne 17 / espaces de section 16-17 (dernière ligne vers y≈759 sur 771) ;
   DejaVu-Oblique absent du conteneur Linux, `pip install reportlab` nécessaire.
 
+### Fumeco — reste à faire (01/10/2026)
+
+- **Après la remise en main propre** : marc-paul donne la date et la personne qui a pris le
+  courrier → mettre `clients_agent.py` à jour (`prochaine_action`, `notes`). Tant qu'il ne l'a
+  pas dit, ne pas écrire « livré ».
+- **Après l'entrevue** : la fiche d'entrevue remplie sert à calculer le ROI avec des vrais
+  chiffres ; ensuite seulement viennent le dossier commercial complet (avec tarif), le bon de
+  commande et le questionnaire technique (étapes 2 à 4 de la structure commerciale).
+- **Corriger le Drive** : les PDF v4/v5/v6 signés `mpsolutionsia@gmail.com`.
+
+### Méthode de travail sur les documents PDF (session du 01/10/2026)
+
+- Ordre validé par marc-paul : accord sur le contenu → génération → **aperçus JPG envoyés avec
+  `SendUserFile`** (page entière + zoom header/bas de page) → corrections → « go » → PDF final.
+  Il dit « montre » pour revoir l'aperçu ; **le PDF n'est envoyé qu'après « go »**.
+- **Renvoyer le PDF final après chaque modification** : il télécharge ce qu'on lui envoie
+  (risque constaté : il a dit « je l'ai téléchargé » alors qu'on n'avait envoyé que des JPG d'aperçu). Vérifier le nom et la date.
+- Il corrige à l'œil et directement : slogan en double, « 1/1 » inutile, blanc en bas de page,
+  ajout de son numéro. Les messages dictés à la voix peuvent être brouillés : dire comment on
+  les a compris, il corrigera si besoin.
+- **Git sur ce dépôt** : après une PR fusionnée, repartir de `origin/main`
+  (`git checkout -B <branche> origin/main`), jamais empiler sur l'historique fusionné. Pour
+  pousser sur `mp-solutions-ia`, l'attacher en écriture (`add_repo` avec `access: push`) : le
+  clone est alors à `/home/user/mp-solutions-ia` (pas dans `/home/user/marcdassens09-bot/`).
+  Marc-Paul demande lui-même la pull request, puis la fusion : ne pas fusionner de lui-même.
+
 ## Conventions
 
 - Clé API dans `.env` (non versionné), jamais en dur.
