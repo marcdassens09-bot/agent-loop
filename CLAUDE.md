@@ -318,6 +318,40 @@ Rotation faite en une journée au lieu de 10 minutes. Ce qui a coûté du temps 
 - Ordre sûr : nouvelle clé → `.env` → test direct → Render → `verifier_services.py` →
   secret GitHub → CI vert → **seulement alors** supprimer l'ancienne.
 
+## Fumeco-Lèze — état au 01/10/2026
+
+- **Un mail a bien été envoyé le 17/08/2026** à `contact@fumeco.fr` (objet « Un chatbot pour
+  désengorger l'accueil client de FUMECO-LEZE ? », trouvé dans `in:sent` Gmail). Aucune réponse
+  vue dans la boîte au 01/10. L'ancienne note « jamais réellement envoyé » ne valait que pour le
+  **dossier PDF**, pas pour ce mail.
+- **01/10 : deux documents créés** (aperçus validés par marc-paul, PDF téléchargés) : un
+  courrier de **premier contact** 1 page, sans tarif (structure Docteur Commercial, « agent qui
+  coordonne », prochaine étape = il passe à l'entreprise), et une **fiche d'entrevue** 2 pages
+  recto verso, interne, avec ROI en cases vides. Marc-Paul les remet **en main propre**
+  (voisin à Artigat) — **remise pas encore confirmée** : ne pas écrire « livré » avant qu'il
+  le dise (date + à qui).
+- **Sources Drive** : dossiers « Fumeco-Lèze » `1MNRS6MvxbypKrQgCq2oRoS-vfJmHSgSm` et
+  `1gcF1wwYtMqHJ7xyJHhPIx4lpP8DfAzdR` (plan d'attaque, mail de prospection, prompts chatbot web
+  et agent vocal, PDF v4/v5/v6). **Les PDF v4/v5/v6 sont signés `mpsolutionsia@gmail.com`**
+  (adresse inexistante) — la bonne est `contact@mpsolutionsia.fr`.
+- **Chiffres qui se contredisent, ne pas les citer comme faits** : salariés (20 dans le plan
+  d'attaque, « +15 » dans `clients_agent.py`) ; références produits (60+ / 50). Dans le
+  courrier on a écrit « un large catalogue ». L'histoire du Dr Caissel et la citation des
+  40 ans (plan d'attaque) n'ont pas de source vérifiée : non reprises.
+- **À ne pas réutiliser** : le plan d'attaque Drive propose un « essai gratuit » (formule
+  interdite dans les documents commerciaux) ; le simulateur de devis Drive donne un ROI négatif
+  et un abonnement à 800 € (erreur).
+- **Coordonnées sur les documents** : Marc-Paul Dassens, 06 44 00 22 52,
+  `contact@mpsolutionsia.fr`, Artigat (09130).
+- **Les scripts générateurs n'ont pas été versionnés** (`premier_contact_fumeco.py`,
+  `fiche_entrevue_fumeco.py` étaient dans le scratchpad cloud, perdus en fin de session) ;
+  `mp-solutions-ia` n'était attaché qu'en lecture. À refaire sur le modèle de
+  `dossier_move_fitness.py` si besoin. Leçons de mise en page : le slogan est déjà dans le logo
+  du header, ne pas le répéter dans le corps ; `build_document(..., show_page_number=False)`
+  retire le « 1/1 » sans toucher `mp_template.py` ; pour remplir une page A4 sans blanc,
+  corps 10 pt / interligne 17 / espaces de section 16-17 (dernière ligne vers y≈759 sur 771) ;
+  DejaVu-Oblique absent du conteneur Linux, `pip install reportlab` nécessaire.
+
 ## Conventions
 
 - Clé API dans `.env` (non versionné), jamais en dur.
