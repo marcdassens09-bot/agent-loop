@@ -49,7 +49,7 @@ client = Anthropic(
     max_retries=3,
 )
 
-MODELE = "claude-sonnet-4-6"
+MODELE = "claude-sonnet-5-5"
 
 # Les 7 services Render du parc (repris de verifier_services.py)
 SERVICES = {
