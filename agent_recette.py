@@ -179,7 +179,7 @@ def juger(critere, question, reponse_bot):
     resultat = client.messages.create(
         model=MODELE,
         max_tokens=200,
-        thinking={"type": "disabled"},
+        thinking={"type": "between_tools"},
         system="Tu es un verificateur de recette pour des chatbots publics "
                "d'entreprises variees (camping, artisans, site vitrine...). "
                "Ne presuppose pas l'activite du bot : juge uniquement selon "
