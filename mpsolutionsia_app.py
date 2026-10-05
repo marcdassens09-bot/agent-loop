@@ -217,9 +217,9 @@ def chat():
 
         try:
             response = client.messages.create(
-                model="claude-sonnet-5",
+                model="claude-sonnet-5-5",
                 max_tokens=1000,
-                thinking={"type": "disabled"},
+                thinking={"type": "between_tools"},
                 system=system_prompt,
                 messages=_dernier_bloc_en_cache(conversation_store[session_id])
             )
@@ -332,9 +332,9 @@ def diagnose():
         logger.info("Test 3: Test appel API Anthropic...")
         try:
             response = client.messages.create(
-                model="claude-sonnet-5",
+                model="claude-sonnet-5-5",
                 max_tokens=10,
-                thinking={"type": "disabled"},
+                thinking={"type": "between_tools"},
                 messages=[{"role": "user", "content": "Hi"}]
             )
             diagnostics["connectivity"]["anthropic_api"] = "✓ API fonctionne"
