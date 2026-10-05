@@ -378,10 +378,38 @@ Rotation faite en une journée au lieu de 10 minutes. Ce qui a coûté du temps 
   clone est alors à `/home/user/mp-solutions-ia` (pas dans `/home/user/marcdassens09-bot/`).
   Marc-Paul demande lui-même la pull request, puis la fusion : ne pas fusionner de lui-même.
 
+## Migration vers `claude-sonnet-5-5` (05/10/2026) — piège `thinking`
+
+Passé sur `claude-sonnet-5-5` : `agent_loop.py` (`MODELE`, repris par `agent_recette.py`),
+`mpsolutionsia_app.py` et `app.py` (PR #11, #12, #13).
+
+- **Sur `claude-sonnet-5-5`, `thinking={"type": "disabled"}` est refusé** : l'API répond
+  `400 invalid_request_error` (« To turn thinking off on this model, send "thinking":
+  {"type": "between_tools"} instead of {"type": "disabled"} »). Il faut
+  `thinking={"type": "between_tools"}`. Sur `claude-sonnet-5`, `disabled` reste la bonne valeur.
+  Toujours accorder le modèle et la valeur de `thinking` dans le même changement.
+- **Vécu le 05/10** : la PR #11 avait changé le modèle et ajouté `disabled` dans `juger()`
+  d'`agent_recette.py` sans test réel (pas de clé en cloud). La CI (run #35) a répondu
+  « jugement impossible », 0/2 cas conformes — l'erreur venait du juge, pas du bot. Corrigé par
+  la PR #12.
+- **Un run CI vert juste après une fusion ne prouve rien** : le run #37 a duré 43 s, moins que le
+  déploiement Render (~45 s), il a pu taper l'ancien code. Attendre « Live » sur Render, puis
+  « Re-run all jobs » (le re-run du 05/10 est vert), puis `python verifier_services.py` (6/6).
+- **Pas migré, volontairement** : `modele_bot/app_modele.py` (modèle des futurs bots clients)
+  reste sur `claude-sonnet-5` + `disabled`. Un bot client créé par `agent_onboarding.py` n'est
+  donc pas sur 5.5. Si on l'aligne un jour : changer `MODELE` **et** `THINKING` ensemble.
+  Les agents internes `debug_agent.py`, `memory_agent.py`, `prospect_agent.py`,
+  `test_api_key.py` sont aussi restés sur `claude-sonnet-4-6`. Le camping et la bulle du site
+  (autres dépôts) n'ont pas été vérifiés.
+- Retour arrière si la prod casse : remettre `claude-sonnet-5` et `disabled` dans
+  `mpsolutionsia_app.py` et `app.py`.
+
 ## Conventions
 
 - Clé API dans `.env` (non versionné), jamais en dur.
-- Modèle : `claude-sonnet-5` (migré le 09/08/2026, tous les bots publics du parc). Sur ce
+- Modèle : `claude-sonnet-5` (migré le 09/08/2026, tous les bots publics du parc ; **ce
+  dépôt est passé sur `claude-sonnet-5-5` le 05/10/2026**, voir la section « Migration vers
+  `claude-sonnet-5-5` » ci-dessous). Sur ce
   modèle, `thinking` est activé par défaut si on ne le précise pas — ajouter
   `thinking={"type": "disabled"}` sur les appels à `max_tokens` serré, sinon le
   raisonnement peut manger le budget avant la réponse. Vérifier aussi la version du SDK
