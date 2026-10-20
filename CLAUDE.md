@@ -404,6 +404,60 @@ Passé sur `claude-sonnet-5-5` : `agent_loop.py` (`MODELE`, repris par `agent_re
 - Retour arrière si la prod casse : remettre `claude-sonnet-5` et `disabled` dans
   `mpsolutionsia_app.py` et `app.py`.
 
+## Reporting des bulles et digests du lundi (20/10/2026)
+
+**Deux digests automatiques** (tâches planifiées, nouvelle session à chaque lancement) :
+
+| Tâche | Quand | Source | Destinataire |
+|---|---|---|---|
+| « Digest reporting camping (lundi) » `trig_015QrTMcKDEtd1EbN2Wn94dQ` | lundi 06:00 UTC | `chatbot-camping-eychecadous.onrender.com/reporting/api` | Anthony (texte à copier-coller) |
+| « Digest reporting site (lundi) » `trig_01GaC2HFKoDmD5JiZ313QVTy` | lundi 7h45 Paris | Google Sheet de la bulle (voir plus bas) | marc-paul (push + email) |
+
+Les deux tâches lisent leurs identifiants dans leur propre prompt.
+
+- **Piège du 19/10** : le digest camping a échoué parce que le proxy de l'environnement cloud
+  refusait `chatbot-camping-eychecadous.onrender.com` (403). Marc-paul a mis l'accès réseau
+  de l'environnement cloud sur **« Complet »** puis enregistré (menu de l'environnement dans
+  la barre de titre → Modifier l'environnement cloud). Si un digest échoue sur un 403 du
+  proxy, vérifier ce réglage avant tout.
+- Les échanges « urgents » du camping au 19/10 étaient **des tests de marc-paul**, pas de
+  vrais clients.
+
+**Bulle du site vitrine (`assistant-mpsolutions`)**, journalisation ajoutée le 20/10 (PR #3
+et #4, fusionnées) :
+
+- Chaîne de lancement vérifiée : le `Procfile` lance `hardened_app.py`, qui importe
+  `website_app.py`, qui importe `app.py`. Modifier `app.py` touche donc bien la prod (pas
+  de piège Start Command ici). `retell_webhook.py` = agent vocal Retell → email Brevo pour
+  chaque appel. Marc-paul a dit de **ne rien y toucher**.
+- `/chat` appelle `log_event()` (modules `reporting_*.py` copiés du camping). Les questions
+  sont masquées par `filtrer_donnees_sensibles` avant l'enregistrement. « urgent » reste à 0
+  et « profil » à « inconnu » : la bulle ne détecte ni l'un ni l'autre.
+- **Render gratuit efface le disque à chaque mise en veille**, et marc-paul refuse de payer
+  un disque persistant. L'historique vit donc dans un **Google Sheet** : « Reporting bulle MP
+  Solutions IA » (`18qgxfNuumIseAgWGc3YyQesOq6bj4TKywfaJy_isg4g`, sur le Drive de marc-paul),
+  alimenté par un script Apps Script déployé en application Web (source :
+  `reporting_google_sheet.gs` dans `assistant-mpsolutions`, avec un jeton fictif, car le
+  dépôt est public). Le jeton réel n'est **jamais** dans un dépôt : il se trouve dans le
+  script déployé, dans la variable Render `REPORTING_SHEET_URL` (`…/exec?token=…`) et dans
+  le prompt du digest site.
+- Variables Render du service `assistant-mpsolutions` : `REPORTING_PASSWORD` (choisi par
+  marc-paul, inconnu de Claude), `REPORTING_CLIENT_NAME`, `REPORTING_SHEET_URL`. Pas de
+  `REPORTING_LOG_PATH` : sans disque, `/var/data` n'existe pas.
+- Consultation : le tableau Google (questions brutes) ou `assistant-mpsolutions.onrender.com/reporting`
+  (mot de passe, champ utilisateur vide). Vérifié de bout en bout le 20/10 : deux questions
+  de test sont bien arrivées dans le tableau. Les 8 échanges de test d'avant le Sheet sont
+  perdus.
+- Si on modifie le script Apps Script, il faut un **nouveau déploiement** (Déployer → Gérer
+  les déploiements → modifier → nouvelle version) pour garder la même URL. Un « Nouveau
+  déploiement » change l'URL, et il faut alors mettre à jour Render et le prompt du digest.
+
+**Accès depuis les sessions cloud** : le connecteur Render est connecté au compte mais
+**désactivé dans les conversations** (`enabledInChat: false`). L'activer en cours de session
+n'a pas suffi le 20/10. Les réglages Render se font donc à la main par marc-paul, guidé étape
+par étape avec captures. **Il préfère une seule étape à la fois**, avec une capture à chaque
+étape. Les longues listes d'instructions le perdent.
+
 ## Conventions
 
 - Clé API dans `.env` (non versionné), jamais en dur.
