@@ -26,9 +26,9 @@ TIMEOUT = 120
 # ils n'ont pas de cle et n'ont rien a verifier ici.
 # agent-loop suspendu le 10/08/2026 (ancien doublon du bot camping, retire) :
 # ne plus le tester ici tant qu'il n'est pas reactive.
+# mpsolutionsia mis en pause le 31/10/2026 (aucun site ne l'appelle) : meme regle.
 SERVICES = [
     # (nom, url, methode de verification)
-    ("mpsolutionsia",              "https://mpsolutionsia.onrender.com",              "diagnose"),
     ("chatbot-camping-eychecadous", "https://chatbot-camping-eychecadous.onrender.com", "diagnose"),
     ("assistant-mpsolutions",      "https://assistant-mpsolutions.onrender.com",      "chat"),
     ("demo-chatbot-ia",            "https://demo-chatbot-ia.onrender.com",            "chat"),
