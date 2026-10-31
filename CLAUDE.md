@@ -9,6 +9,12 @@ Dépôt d'agents et d'applications Flask pour MP Solutions IA (marc-paul, Arièg
 | `mpsolutionsia` | `mpsolutionsia_app.py` | chatbot multi-métiers, 8 métiers via un paramètre `metier` |
 | `agent-loop` | `app.py` | ancienne application |
 
+**Les deux sont en pause sur Render** : `agent-loop` depuis le 10/08/2026, `mpsolutionsia`
+depuis le **31/10/2026** (aucun site ne l'appelait : mpsolutionsia.fr est servi par
+`site-mpsolutions`, dont la bulle appelle `assistant-mpsolutions`). mpsolutionsia est retiré
+de `verifier_services.py`, `agent_loop.py`, `agent_recette.py`, `agent_docteur.py` et du
+déclenchement automatique de la CI ; chaque fichier garde une note datée pour le remettre.
+
 **Piège vérifié le 03/08/2026 :** Render auto-détecte `app.py` à la racine et préremplit sa
 **Start Command** avec `gunicorn app:app`. Cette valeur du dashboard **écrase le `Procfile`**.
 Résultat : on modifie un fichier qui n'est jamais chargé, et aucun correctif n'a d'effet.
@@ -67,11 +73,12 @@ d'interdiction (« jamais X », « pas X »).
 python verifier_services.py
 ```
 
-Teste les 7 services Render qui appellent l'API Anthropic et distingue une vraie réponse
+Teste les services Render qui appellent l'API Anthropic (5 depuis la pause de mpsolutionsia le 31/10/2026, dont 2 déjà en pause) et distingue une vraie réponse
 d'un message de repli. À lancer avant et après toute rotation de clé.
 
-Depuis le 09/08/2026, `.github/workflows/recette-mpsolutionsia.yml` relance
-`agent_recette.py mpsolutionsia` automatiquement à chaque push sur `main` (secret GitHub
+Du 09/08 au 31/10/2026, `.github/workflows/recette-mpsolutionsia.yml` relançait
+`agent_recette.py mpsolutionsia` automatiquement à chaque push sur `main` — **coupé le
+31/10/2026** avec la pause du service (le workflow ne se lance plus qu'à la main) (secret GitHub
 `ANTHROPIC_API_KEY` requis). Attention au faux positif/négatif juste après un push : Render
 met ~45 s à finir son déploiement, la CI peut taper l'ancien code encore en ligne ou le
 nouveau pas encore stabilisé — ne pas conclure sur le tout premier run, relancer
