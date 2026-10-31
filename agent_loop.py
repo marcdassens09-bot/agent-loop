@@ -51,9 +51,9 @@ client = Anthropic(
 
 MODELE = "claude-sonnet-5-5"
 
-# Les 7 services Render du parc (repris de verifier_services.py)
+# Les services Render du parc (repris de verifier_services.py).
+# mpsolutionsia mis en pause le 31/10/2026 : retiré de la liste.
 SERVICES = {
-    "mpsolutionsia": "https://mpsolutionsia.onrender.com",
     "agent-loop": "https://agent-loop.onrender.com",
     "chatbot-camping-eychecadous": "https://chatbot-camping-eychecadous.onrender.com",
     "assistant-mpsolutions": "https://assistant-mpsolutions.onrender.com",
@@ -166,7 +166,7 @@ OUTILS = [
     },
     {
         "name": "verifier_service_render",
-        "description": "Vérifie qu'un des 7 services Render de MP Solutions "
+        "description": "Vérifie qu'un des services Render de MP Solutions "
                        "répond. Peut prendre ~50 secondes si l'instance "
                        "gratuite dort.",
         "input_schema": {

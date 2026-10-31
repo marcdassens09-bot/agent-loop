@@ -4,9 +4,12 @@ name: Recette mpsolutionsia
 # Objectif : detecter en quelques minutes une regression qui casserait le
 # bot en prod (cle API invalide, reponse de repli, perte de la phrase
 # d'identification IA Act) au lieu de la decouvrir via un client.
+#
+# mpsolutionsia mis en pause sur Render le 31/10/2026 (aucun site ne
+# l'appelle) : declenchement automatique coupe. Pour le reprendre : relancer
+# le service sur Render (Resume), remettre sa suite dans SUITES
+# d'agent_recette.py, puis remettre ci-dessous "push: branches: [main]".
 on:
-  push:
-    branches: [main]
   workflow_dispatch: {}
 
 permissions:

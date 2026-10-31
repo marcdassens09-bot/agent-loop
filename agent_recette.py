@@ -121,17 +121,14 @@ CAS_DE_TEST = [
 # Les bots publics testables et leur suite de cas. Le bot camping a sa suite
 # complete ; les autres passent les cas communs. "agent-loop" (ancienne
 # application) n'est pas couvert : pas de /chat public documente.
-# mpsolutionsia exige un champ "metier" en plus du message.
+# mpsolutionsia mis en pause le 31/10/2026 : retiré des suites. Pour le
+# reprendre, remettre "url": "https://mpsolutionsia.onrender.com",
+# "extra": {"metier": "plombier"}, "cas": CAS_COMMUNS.
 SUITES = {
     "chatbot-camping-eychecadous": {
         "url": URL_PROD_CAMPING,
         "extra": {},
         "cas": None,  # rempli plus bas : CAS_DE_TEST complet
-    },
-    "mpsolutionsia": {
-        "url": "https://mpsolutionsia.onrender.com",
-        "extra": {"metier": "plombier"},
-        "cas": CAS_COMMUNS,
     },
     "assistant-mpsolutions": {
         "url": "https://assistant-mpsolutions.onrender.com",
