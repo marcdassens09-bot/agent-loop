@@ -38,11 +38,18 @@ SERVICES = [
 
 MESSAGE_TEST = "Bonjour, quels sont vos horaires ?"
 
+# Les bots qui enregistrent les questions (reporting) ignorent les messages
+# portant cet en-tête : sinon le test du matin faussait les statistiques et
+# le rapport IA de la bulle (constaté le 01/11/2026).
+ENTETE_SURVEILLANCE = {"X-MPS-Surveillance": "1"}
+
 
 def _appel(url, donnees=None):
     """Retourne (code_http, corps_texte) ou (None, message_erreur)."""
     corps = json.dumps(donnees).encode() if donnees is not None else None
-    entetes = {"Content-Type": "application/json"} if donnees is not None else {}
+    entetes = dict(ENTETE_SURVEILLANCE)
+    if donnees is not None:
+        entetes["Content-Type"] = "application/json"
     requete = urllib.request.Request(url, data=corps, headers=entetes)
     try:
         with urllib.request.urlopen(requete, timeout=TIMEOUT) as r:
