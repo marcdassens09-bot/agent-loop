@@ -1,0 +1,34 @@
+name: Rapport du lundi
+
+# Chaque lundi, envoie par email (Brevo) les rapports IA des chatbots et les
+# visiteurs GoatCounter de la semaine. Tourne chez GitHub : PC éteint, ça marche.
+# 6 h UTC = 7 h en hiver, 8 h en été (heure de Paris).
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  rapport:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Installer les dependances
+        run: pip install Markdown==3.11.2
+
+      - name: Envoyer le rapport du lundi
+        env:
+          RAPPORT_CLE_CAMPING: ${{ secrets.RAPPORT_CLE_CAMPING }}
+          RAPPORT_CLE_BULLE: ${{ secrets.RAPPORT_CLE_BULLE }}
+          RAPPORT_CLE_DEMO: ${{ secrets.RAPPORT_CLE_DEMO }}
+          GOATCOUNTER_TOKEN: ${{ secrets.GOATCOUNTER_TOKEN }}
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+        run: python rapport_lundi.py
